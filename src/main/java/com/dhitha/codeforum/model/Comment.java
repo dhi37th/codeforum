@@ -28,7 +28,7 @@ public class Comment extends Audit {
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "questionId", nullable = false)
+  @JoinColumn(name = "question_id", nullable = false)
   @OnDelete(action = OnDeleteAction.CASCADE)
   @JsonIgnore
   private Question question;
