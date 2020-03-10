@@ -9,13 +9,17 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "user")
 @Data
+@AllArgsConstructor
 @Builder
+@NoArgsConstructor
 public class User implements Serializable {
   private static final long serialVersionUID = 1L;
 
