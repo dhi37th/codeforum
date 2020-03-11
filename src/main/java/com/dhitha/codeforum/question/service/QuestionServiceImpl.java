@@ -27,14 +27,12 @@ public class QuestionServiceImpl implements QuestionService {
 
   @Override
   public Question updateQuestion(Question question) {
-    Optional<Question> existingQuestion = questionRepository.findById(question.getId());
-    if (existingQuestion.isPresent()) {
+    return questionRepository.findById(question.getId()).map(existingQuestion -> {
       String[] ignoreProperties = getNullPropertyNames(question);
-      BeanUtils.copyProperties(question, existingQuestion.get(), ignoreProperties);
-      return questionRepository.saveAndFlush(existingQuestion.get());
-    } else {
-      return addQuestion(question);
-    }
+      BeanUtils.copyProperties(question, existingQuestion, ignoreProperties);
+      return questionRepository.saveAndFlush(existingQuestion);
+    }).orElse(null);
+
   }
 
   @Override
@@ -43,17 +41,17 @@ public class QuestionServiceImpl implements QuestionService {
   }
 
   @Override
-  public List<Question> getAllQuestionOfUser(Long userId) {
-    return questionRepository.findAllByUserId(userId);
+  public Optional<List<Question>> getAllQuestionsOfUser(Long userId) {
+    return questionRepository.findAllByCreatedBy(userId);
   }
 
   @Override
-  public Question getQuestionById(Long questionId) {
-    return questionRepository.findById(questionId).orElse(null);
+  public Optional<Question> getQuestionById(Long questionId) {
+    return questionRepository.findById(questionId);
   }
 
   @Override
-  public Page<Question> getAllQuestionOfUser(int pageNumber, int limit) {
+  public Page<Question> getAllQuestionsOfUser(int pageNumber, int limit) {
     Pageable pageable = PageRequest.of(pageNumber, limit);
     return questionRepository.findAll(pageable);
   }

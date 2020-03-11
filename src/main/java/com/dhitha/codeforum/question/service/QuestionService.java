@@ -2,6 +2,7 @@ package com.dhitha.codeforum.question.service;
 
 import com.dhitha.codeforum.question.model.Question;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 
 public interface QuestionService {
@@ -35,21 +36,22 @@ public interface QuestionService {
    * @param userId id of user
    * @return ArrayList
    */
-  List<Question> getAllQuestionOfUser(Long userId);
+  Optional<List<Question>> getAllQuestionsOfUser(Long userId);
 
   /**
    * Get a question by id
    *
    * @param questionId id
-   * @return Question
+   * @return Optional
    */
-  Question getQuestionById(Long questionId);
+  Optional<Question> getQuestionById(Long questionId);
 
   /**
    * Return list of all question based on pagination
+   *
    * @param pageNumber pageNumber
    * @param limit limit
    * @return Page
    */
-  Page<Question> getAllQuestionOfUser(int pageNumber,int limit);
+  Page<Question> getAllQuestionsOfUser(int pageNumber, int limit);
 }

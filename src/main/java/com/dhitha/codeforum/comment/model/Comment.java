@@ -16,13 +16,14 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "comment")
 @Data
-@Builder
+@NoArgsConstructor
 public class Comment extends Audit {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

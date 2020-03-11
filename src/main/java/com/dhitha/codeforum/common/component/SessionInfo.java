@@ -15,7 +15,8 @@ public class SessionInfo {
 
   public User getSessionUser() {
     if (user == null) {
-      user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+       String principalName = SecurityContextHolder.getContext().getAuthentication().getName();
+       user = userService.findByLoginId(principalName);
     }
     return user;
   }

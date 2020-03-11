@@ -7,12 +7,12 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SystemLoggedInUserAuditorAware implements AuditorAware<User> {
+public class SystemLoggedInUserAuditorAware implements AuditorAware<Long> {
 
   @Autowired private SessionInfo sessionInfo;
 
   @Override
-  public Optional<User> getCurrentAuditor() {
-    return Optional.of(sessionInfo.getSessionUser());
+  public Optional<Long> getCurrentAuditor() {
+    return Optional.of(sessionInfo.getSessionUser().getId());
   }
 }
