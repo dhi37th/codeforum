@@ -1,7 +1,7 @@
-package com.dhitha.codeforum.service;
+package com.dhitha.codeforum.user.service;
 
-import com.dhitha.codeforum.model.User;
-import com.dhitha.codeforum.repository.UserRepository;
+import com.dhitha.codeforum.user.model.User;
+import com.dhitha.codeforum.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,5 +14,15 @@ public class UserServiceImpl implements UserService {
   @Override
   public User findByLoginId(String loginId) {
     return userRepository.findByLoginId(loginId);
+  }
+
+  @Override
+  public User addUser(User user) {
+    return userRepository.save(user);
+  }
+
+  @Override
+  public void deleteUser(Long userId) {
+     userRepository.deleteById(userId);
   }
 }

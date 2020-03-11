@@ -1,4 +1,4 @@
-package com.dhitha.codeforum.model;
+package com.dhitha.codeforum.user.model;
 
 import java.io.Serializable;
 import javax.persistence.Column;
@@ -26,7 +26,7 @@ public class User implements Serializable {
   @Id
   @Column
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long id;
+  private Long id;
 
   @Column @NotNull @NotEmpty private String name;
 
@@ -34,5 +34,5 @@ public class User implements Serializable {
 
   @Column @NotNull @NotEmpty private String password;
 
-  @Column private boolean isAdmin;
+  @Column private Boolean isAdmin;
 }

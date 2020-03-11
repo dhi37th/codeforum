@@ -1,4 +1,4 @@
-package com.dhitha.codeforum.component;
+package com.dhitha.codeforum.common.component;
 
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;

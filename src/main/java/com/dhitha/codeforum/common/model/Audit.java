@@ -1,5 +1,6 @@
-package com.dhitha.codeforum.model;
+package com.dhitha.codeforum.common.model;
 
+import com.dhitha.codeforum.user.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.time.LocalDateTime;

@@ -1,6 +1,6 @@
-package com.dhitha.codeforum.component;
+package com.dhitha.codeforum.common.component;
 
-import com.dhitha.codeforum.model.User;
+import com.dhitha.codeforum.user.model.User;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.AuditorAware;

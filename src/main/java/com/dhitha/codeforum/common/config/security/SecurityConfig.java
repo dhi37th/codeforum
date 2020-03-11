@@ -1,10 +1,11 @@
-package com.dhitha.codeforum.config.security;
+package com.dhitha.codeforum.common.config.security;
 
-import com.dhitha.codeforum.component.EncryptionUtil;
+import com.dhitha.codeforum.common.component.EncryptionUtil;
 import java.security.GeneralSecurityException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -51,6 +52,44 @@ public class SecurityConfig {
     return authProvider;
   }
 
+//  @Configuration
+//  @Order(1)
+  public  class ApiSecurityConfig extends WebSecurityConfigurerAdapter{
+
+//    @Autowired
+//    ApiAuthenticationEntryPoint apiAuthenticationEntryPoint;
+
+    private static final String API_URL = "/api/**";
+    private static final String ADMIN = "ADMIN";
+
+    @Override
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+      auth.authenticationProvider(authProvider());
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception{
+//      http.antMatcher(API_URL)
+//          .authorizeRequests()
+//          .antMatchers(HttpMethod.GET, API_URL).hasAnyRole("USER",ADMIN)
+//          .antMatchers(HttpMethod.POST, API_URL).hasRole(ADMIN)
+//          .antMatchers(HttpMethod.PUT, API_URL).hasRole(ADMIN)
+//          .antMatchers(HttpMethod.DELETE, API_URL).hasRole(ADMIN)
+//          .and()
+//          .httpBasic()
+//          .realmName("TCS_RECIPE") // exception caused if not specified : Error creating bean with name 'apiAuthenticationEntryPoint': java.lang.IllegalArgumentException: realmName must be specified
+//          .and().exceptionHandling() .authenticationEntryPoint(apiAuthenticationEntryPoint).and().sessionManagement().sessionCreationPolicy(
+//          SessionCreationPolicy.STATELESS)
+//          .and()
+//          .csrf().disable()
+//          .formLogin().disable();
+    }
+  }
+
+
+  /**
+   * Manage security calls for front end
+   */
   @Configuration
   public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 

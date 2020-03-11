@@ -1,6 +1,6 @@
-package com.dhitha.codeforum.repository;
+package com.dhitha.codeforum.comment.repository;
 
-import com.dhitha.codeforum.model.Comment;
+import com.dhitha.codeforum.comment.model.Comment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

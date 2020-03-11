@@ -1,7 +1,7 @@
-package com.dhitha.codeforum.component;
+package com.dhitha.codeforum.common.component;
 
-import com.dhitha.codeforum.model.User;
-import com.dhitha.codeforum.service.UserService;
+import com.dhitha.codeforum.user.model.User;
+import com.dhitha.codeforum.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;

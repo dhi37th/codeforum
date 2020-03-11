@@ -1,7 +1,7 @@
-package com.dhitha.codeforum.config.security;
+package com.dhitha.codeforum.common.config.security;
 
-import com.dhitha.codeforum.model.User;
-import com.dhitha.codeforum.service.UserService;
+import com.dhitha.codeforum.user.model.User;
+import com.dhitha.codeforum.user.service.UserService;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class SecurityUserDetailService implements UserDetailsService {
       throw new UsernameNotFoundException("User " + loginId + " was not found in the database");
     }
     List<GrantedAuthority> grantList = new ArrayList<>();
-    if(Boolean.TRUE.equals(user.isAdmin())) {
+    if(Boolean.TRUE.equals(user.getIsAdmin())) {
       GrantedAuthority adminAuthority= new SimpleGrantedAuthority("ROLE_ADMIN");
       GrantedAuthority userAuthority= new SimpleGrantedAuthority("ROLE_USER");
       grantList.add(adminAuthority);

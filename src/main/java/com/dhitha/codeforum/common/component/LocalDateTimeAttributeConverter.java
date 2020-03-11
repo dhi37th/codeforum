@@ -1,4 +1,4 @@
-package com.dhitha.codeforum.component;
+package com.dhitha.codeforum.common.component;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;

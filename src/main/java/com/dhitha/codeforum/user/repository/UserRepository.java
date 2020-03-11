@@ -1,6 +1,6 @@
-package com.dhitha.codeforum.repository;
+package com.dhitha.codeforum.user.repository;
 
-import com.dhitha.codeforum.model.User;
+import com.dhitha.codeforum.user.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
