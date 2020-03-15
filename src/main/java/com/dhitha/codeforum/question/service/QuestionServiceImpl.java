@@ -1,14 +1,12 @@
 package com.dhitha.codeforum.question.service;
 
+import com.dhitha.codeforum.common.component.RepositoryUtility;
 import com.dhitha.codeforum.question.model.Question;
 import com.dhitha.codeforum.question.repository.QuestionRepository;
-import java.beans.FeatureDescriptor;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
+@Log4j2
 public class QuestionServiceImpl implements QuestionService {
 
   @Autowired QuestionRepository questionRepository;
@@ -27,12 +26,16 @@ public class QuestionServiceImpl implements QuestionService {
 
   @Override
   public Question updateQuestion(Question question) {
-    return questionRepository.findById(question.getId()).map(existingQuestion -> {
-      String[] ignoreProperties = getNullPropertyNames(question);
-      BeanUtils.copyProperties(question, existingQuestion, ignoreProperties);
-      return questionRepository.saveAndFlush(existingQuestion);
-    }).orElse(null);
-
+    return questionRepository
+        .findById(question.getId())
+        .map(
+            existingQuestion -> {
+              String[] ignoreProperties = RepositoryUtility.getNullPropertyNames(question);
+              BeanUtils.copyProperties(question, existingQuestion, ignoreProperties);
+              log.info(existingQuestion);
+              return questionRepository.saveAndFlush(existingQuestion);
+            })
+        .orElse(null);
   }
 
   @Override
@@ -65,14 +68,5 @@ public class QuestionServiceImpl implements QuestionService {
   public Page<Question> getAllQuestions(int pageNumber, int limit) {
     Pageable pageable = PageRequest.of(pageNumber, limit);
     return questionRepository.findAll(pageable);
-  }
-
-  private String[] getNullPropertyNames(Question question) {
-    BeanWrapper wrapper = new BeanWrapperImpl(question);
-
-    return Stream.of(wrapper.getPropertyDescriptors())
-        .map(FeatureDescriptor::getName)
-        .filter(name -> wrapper.getPropertyDescriptor(name) == null)
-        .toArray(String[]::new);
   }
 }

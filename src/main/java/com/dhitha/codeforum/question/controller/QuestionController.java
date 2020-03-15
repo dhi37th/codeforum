@@ -6,6 +6,7 @@ import com.dhitha.codeforum.question.model.Question;
 import com.dhitha.codeforum.question.service.QuestionService;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -85,14 +86,10 @@ public class QuestionController {
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Question> updateQuestion(
-      @PathVariable Long questionId, @Valid @RequestBody Question question) {
-    return questionService
-        .getQuestionById(questionId)
-        .map(
-            existingQuestion -> {
-              question.setId(existingQuestion.getId());
-              return ResponseEntity.ok(questionService.updateQuestion(question));
-            })
+      @PathVariable Long questionId, @RequestBody Question question) {
+    question.setId(questionId);
+    return Optional.of(questionService.updateQuestion(question))
+        .map(ResponseEntity::ok)
         .orElseThrow(
             () -> new ResourceNotFoundException("Question not found for id: " + questionId));
   }

@@ -2,6 +2,7 @@ package com.dhitha.codeforum.answer.service;
 
 import com.dhitha.codeforum.answer.model.Answer;
 import com.dhitha.codeforum.answer.repository.AnswerRepository;
+import com.dhitha.codeforum.common.component.RepositoryUtility;
 import java.beans.FeatureDescriptor;
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +29,7 @@ public class AnswerServiceImpl implements AnswerService {
   @Override
   public Answer updateAnswer(Answer answer) {
     return answerRepository.findById(answer.getId()).map(existingAnswer -> {
-      String[] ignoreProperties = getNullPropertyNames(answer);
+      String[] ignoreProperties = RepositoryUtility.getNullPropertyNames(answer);
       BeanUtils.copyProperties(answer, existingAnswer, ignoreProperties);
       return answerRepository.saveAndFlush(existingAnswer);
     }).orElse(null);
@@ -50,17 +51,13 @@ public class AnswerServiceImpl implements AnswerService {
   }
 
   @Override
+  public Optional<Answer> getAnswerById(Long answerId) {
+    return answerRepository.findById(answerId);
+  }
+
+  @Override
   public Page<Answer> getAllAnswersOfQuestion(int pageNumber, int limit, Long questionId) {
     Pageable pageable = PageRequest.of(pageNumber, limit);
     return answerRepository.findByQuestionId(questionId, pageable);
-  }
-
-  private String[] getNullPropertyNames(Answer answer) {
-    BeanWrapper wrapper = new BeanWrapperImpl(answer);
-
-    return Stream.of(wrapper.getPropertyDescriptors())
-        .map(FeatureDescriptor::getName)
-        .filter(name -> wrapper.getPropertyDescriptor(name) == null)
-        .toArray(String[]::new);
   }
 }

@@ -31,14 +31,14 @@ public class Comment extends Audit {
   @Column
   private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "question_id", nullable = false)
+  @ManyToOne(fetch = FetchType.LAZY, optional = true)
+  @JoinColumn(name = "question_id")
   @OnDelete(action = OnDeleteAction.CASCADE)
   @JsonIgnore
   private Question question;
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "answer_id", nullable = false)
+  @ManyToOne(fetch = FetchType.LAZY, optional = true)
+  @JoinColumn(name = "answer_id")
   @OnDelete(action = OnDeleteAction.CASCADE)
   @JsonIgnore
   private Answer answer;

@@ -6,6 +6,7 @@ import com.dhitha.codeforum.common.model.ResourceNotFoundException;
 import com.dhitha.codeforum.question.service.QuestionService;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import javax.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,13 +92,10 @@ public class AnswerController {
       @PathVariable("questionId") Long questionId,
       @PathVariable("answerId") Long answerId,
       @Valid @RequestBody Answer answer) {
-    return answerService
-        .getAnswerById(questionId, answerId)
-        .map(
-            existingAnswer -> {
-              answer.setId(existingAnswer.getId());
-              return ResponseEntity.ok(answerService.updateAnswer(answer));
-            })
+    answer.setId(answerId);
+    answer.setQuestion(questionService.getQuestionById(questionId).orElse(null));
+    return Optional.of(answerService.updateAnswer(answer))
+        .map(ResponseEntity::ok)
         .orElseThrow(() -> new ResourceNotFoundException("Answer not found for id: " + answerId));
   }
 }

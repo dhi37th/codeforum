@@ -1,8 +1,8 @@
 package com.dhitha.codeforum.comment.repository;
 
 import com.dhitha.codeforum.comment.model.Comment;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,8 +13,15 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
    * Find the comments per question id
    *
    * @param questionId question id
-   * @param pageable per page data
-   * @return Page
+   * @return List
    */
-  Page<Comment> findByQuestionId(Long questionId, Pageable pageable);
+  Optional<List<Comment>> findByQuestionId(Long questionId);
+
+  /**
+   * Find the comments per answer id
+   *
+   * @param answerId answer id
+   * @return List
+   */
+  Optional<List<Comment>> findByAnswerId(Long answerId);
 }
