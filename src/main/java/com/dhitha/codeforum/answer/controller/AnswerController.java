@@ -56,7 +56,7 @@ public class AnswerController {
   }
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<List<Answer>> getAnswerForQuestion(
+  public ResponseEntity<List<Answer>> getAnswersForQuestion(
       @PathVariable("questionId") Long questionId) {
     return answerService
         .getAllAnswersOfQuestion(questionId)
@@ -87,7 +87,7 @@ public class AnswerController {
       value = "{answerId}",
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Answer> updateQuestion(
+  public ResponseEntity<Answer> updateAnswer(
       @PathVariable("questionId") Long questionId,
       @PathVariable("answerId") Long answerId,
       @Valid @RequestBody Answer answer) {
@@ -98,7 +98,6 @@ public class AnswerController {
               answer.setId(existingAnswer.getId());
               return ResponseEntity.ok(answerService.updateAnswer(answer));
             })
-        .orElseThrow(
-            () -> new ResourceNotFoundException("Answer not found for id: " + answerId));
+        .orElseThrow(() -> new ResourceNotFoundException("Answer not found for id: " + answerId));
   }
 }
