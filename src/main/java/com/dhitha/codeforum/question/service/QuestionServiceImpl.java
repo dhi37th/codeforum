@@ -3,6 +3,7 @@ package com.dhitha.codeforum.question.service;
 import com.dhitha.codeforum.common.component.RepositoryUtility;
 import com.dhitha.codeforum.question.model.Question;
 import com.dhitha.codeforum.question.repository.QuestionRepository;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
@@ -50,7 +51,8 @@ public class QuestionServiceImpl implements QuestionService {
 
   @Override
   public Optional<List<Question>> getAllQuestions() {
-    return Optional.of(questionRepository.findAll());
+    List<Question> questions = questionRepository.findAll();
+    return Optional.ofNullable(questions.equals(Collections.emptyList()) ? null : questions);
   }
 
   @Override

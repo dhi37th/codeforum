@@ -5,13 +5,27 @@ article{
 }
 
 body{
-  background: #fff;
+  background: #f1f1f1;
 }
 
 .side-sticky{
-  top: 23% !important;
+  top: 85px !important;
 }
 
 .btn-group-vertical > *{
   padding: 0 10%;
+}
+
+.search-icon{
+  height: 25px;
+  width: 25px;
+  background-color:#e9ecef;
+}
+
+#searchButtonToggle{
+  background-color:#e9ecef;
+}
+
+#questionIssue{
+margin-right:20%;
 }
