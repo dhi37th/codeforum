@@ -3,6 +3,7 @@ package com.dhitha.codeforum.question.service;
 import com.dhitha.codeforum.question.model.Question;
 import java.util.List;
 import java.util.Optional;
+import org.aspectj.weaver.Lint;
 import org.springframework.data.domain.Page;
 
 public interface QuestionService {
@@ -39,6 +40,13 @@ public interface QuestionService {
   Optional<List<Question>> getAllQuestionsOfUser(Long userId);
 
   /**
+   * Get all question in forum
+   *
+   * @return
+   */
+  Optional<List<Question>> getAllQuestions();
+
+  /**
    * Get a question by id
    *
    * @param questionId id
@@ -47,11 +55,19 @@ public interface QuestionService {
   Optional<Question> getQuestionById(Long questionId);
 
   /**
-   * Return list of all question based on pagination
+   * Return list of all question of a user based on pagination
    *
    * @param pageNumber pageNumber
    * @param limit limit
    * @return Page
    */
-  Page<Question> getAllQuestionsOfUser(int pageNumber, int limit);
+  Page<Question> getAllQuestionsOfUser(int pageNumber, int limit, Long userId);
+
+  /**
+   * Return list of all question based on pagination
+   * @param pageNumber
+   * @param limit
+   * @return
+   */
+  Page<Question> getAllQuestions(int pageNumber, int limit);
 }

@@ -1,5 +1,7 @@
 package com.dhitha.codeforum.question.controller;
 
+import com.dhitha.codeforum.common.component.SessionInfo;
+import com.dhitha.codeforum.common.model.ResourceNotFoundException;
 import com.dhitha.codeforum.question.model.Question;
 import com.dhitha.codeforum.question.service.QuestionService;
 import java.net.URI;
@@ -16,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -26,29 +27,38 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 public class QuestionController {
   @Autowired QuestionService questionService;
 
+  @Autowired SessionInfo sessionInfo;
+
   @GetMapping(value = "{questionId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Question> getQuestion(@PathVariable("questionId") Long questionId) {
     return questionService
         .getQuestionById(questionId)
-        .map(
-            question -> {
-              return ResponseEntity.ok(question);
-            })
+        .map(ResponseEntity::ok)
         .orElseThrow(
-            () -> new QuestionNotFoundException("Question not found for id: " + questionId));
+            () -> new ResourceNotFoundException("Question not found for id: " + questionId));
   }
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<List<Question>> getAllQuestionOfUser(
-      @RequestParam(value = "userId", required = true) Long userId) {
+  public ResponseEntity<List<Question>> getAllQuestionOfUser() {
+    if (sessionInfo.getSessionUser() != null) {
+      Long userId = sessionInfo.getSessionUser().getId();
+      return questionService
+          .getAllQuestionsOfUser(userId)
+          .map(ResponseEntity::ok)
+          .orElseThrow(
+              () -> new ResourceNotFoundException("Question not found for userId: " + userId));
+    } else {
+      //TODO: change exception
+      throw new ResourceNotFoundException("User session not available");
+    }
+  }
+
+  @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<List<Question>> getAllQuestions() {
     return questionService
-        .getAllQuestionsOfUser(userId)
-        .map(
-            questions -> {
-              return ResponseEntity.ok(questions);
-            })
-        .orElseThrow(
-            () -> new QuestionNotFoundException("Question not found for userid: " + userId));
+        .getAllQuestions()
+        .map(ResponseEntity::ok)
+        .orElseThrow(() -> new ResourceNotFoundException("No questions found"));
   }
 
   @DeleteMapping("{questionId}")
@@ -84,15 +94,6 @@ public class QuestionController {
               return ResponseEntity.ok(questionService.updateQuestion(question));
             })
         .orElseThrow(
-            () -> new QuestionNotFoundException("Question not found for id: " + questionId));
-  }
-
-  @ResponseStatus(HttpStatus.NOT_FOUND)
-  public class QuestionNotFoundException extends RuntimeException {
-    public static final long serialVersionUID = 1;
-
-    QuestionNotFoundException(String ex) {
-      super(ex);
-    }
+            () -> new ResourceNotFoundException("Question not found for id: " + questionId));
   }
 }

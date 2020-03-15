@@ -3,8 +3,65 @@
 <head>
   <meta charset="UTF-8">
   <title>Code Forum</title>
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+  <link rel="stylesheet" href="css/home.css">
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+          integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+          crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+          integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+          crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+          integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+          crossorigin="anonymous"></script>
+  <script src="js/home.js"></script>
+  <script src="js/question.js"></script>
 </head>
 <body>
-
+<nav class="navbar navbar-expand-sm sticky-top navbar-light" style="background-color: #A2F7F7;">
+  <a class="navbar-brand pr-5" href="/home">Code Forum</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#dropnav">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="navbar-collapse collapse" id="dropnav">
+    <form class="mx-4 my-auto d-inline w-100">
+      <div class="input-group">
+        <input type="text" class="form-control border text-center"
+               placeholder="Search">
+      </div>
+    </form>
+    <ul class="navbar-nav">
+      <li class="nav-item dropdown">
+        <a href="logout" class="btn btn-dark border">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-2">
+        <div class="sticky-top side-sticky shadow p-3 mb-5 bg-white rounded">
+          <ul class="nav flex-column nav-pills" id="leftNav">
+            <li class="nav-item">
+              <a class="nav-link left-link active" style="cursor:pointer;" id="myQuestionNav">Active</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link left-link" style="cursor:pointer;" id="allQuestionNav">Link</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div style="min-height:2000px;">
+          <h2>Content Section</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
 </body>
 </html>

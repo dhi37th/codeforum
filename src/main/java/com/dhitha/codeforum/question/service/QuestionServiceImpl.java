@@ -46,12 +46,23 @@ public class QuestionServiceImpl implements QuestionService {
   }
 
   @Override
+  public Optional<List<Question>> getAllQuestions() {
+    return Optional.of(questionRepository.findAll());
+  }
+
+  @Override
   public Optional<Question> getQuestionById(Long questionId) {
     return questionRepository.findById(questionId);
   }
 
   @Override
-  public Page<Question> getAllQuestionsOfUser(int pageNumber, int limit) {
+  public Page<Question> getAllQuestionsOfUser(int pageNumber, int limit, Long userId) {
+    Pageable pageable = PageRequest.of(pageNumber, limit);
+    return questionRepository.findAllByCreatedBy(userId, pageable);
+  }
+
+  @Override
+  public Page<Question> getAllQuestions(int pageNumber, int limit) {
     Pageable pageable = PageRequest.of(pageNumber, limit);
     return questionRepository.findAll(pageable);
   }
