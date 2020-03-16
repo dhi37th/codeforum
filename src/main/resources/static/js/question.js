@@ -12,6 +12,7 @@ function createQuestionSkeleton(){
 }
 function createQuestionDiv(question){
   //$('#questionColumn').empty();
+  $('#noOfQuestions').html(allQuestionArray.length);
   var questionRow =
   "<div class='row border-bottom border-dark shadow p-3 mb-3 bg-white rounded'>"+
     "<div class='col-2' id='stats'>"+
@@ -20,7 +21,7 @@ function createQuestionDiv(question){
         "<div class='col-md-12'><small>votes</small></div>"+
       "</div>"+
       "<div class='row'>"+
-        "<div class='col-md-12'><strong id='questionAnswers'>0</strong></div>"+
+        "<div class='col-md-12'><strong id='questionAnswers'>"+0+"</strong></div>"+
         "<div class='col-md-12'><small>answers</small></div>"+
       "</div>"+
     "</div>"+
@@ -33,7 +34,7 @@ function createQuestionDiv(question){
       "</div>"+
       "<div class='row'>"+
         "<div class='col-8'>"+
-          "<p>"+question.tag+"</p>"+
+          "<p>"+createQuestionTag(question.tag)+"</p>"+
         "</div>"+
         "<div class='col-4'>"+
           "<p class='mb-1 small'>asked "+question.updatedAt+"</p>"+
@@ -43,6 +44,18 @@ function createQuestionDiv(question){
     "</div>"+
   "</div>";
   $('#questionColumn').append(questionRow);
+}
+
+function createQuestionTag(tag){
+  var tagHtml = '';
+  var chars = tag.split(',');
+  chars.forEach(t => {
+     if(t!=undefined || t!='null'){
+      console.log(t);
+       tagHtml+="<small class='tag-item mr-2 p-1'>"+t+"</small>"
+     }
+   });
+  return tagHtml;
 }
 function getQuestions(){
   $.ajax({
