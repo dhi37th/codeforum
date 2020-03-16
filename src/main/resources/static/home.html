@@ -4,19 +4,11 @@
   <meta charset="UTF-8">
   <title>Code Forum</title>
   <link rel="stylesheet"
-        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-        crossorigin="anonymous">
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/home.css">
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
-          integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-          crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-          integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-          crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-          integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-          crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <script src="js/home.js"></script>
   <script src="js/question.js"></script>
 </head>
@@ -76,8 +68,7 @@
           </div>
         </nav>
       </div>
-      <div class="col-md-8" id="questionDiv" style="min-height:2000px;">
-        <h6 id="noQuestion" style="display:none;"></h6>
+      <div class="col-md-8" id="questionColumn">
         <!-- Place all questions -->
         <div class="row border-bottom border-dark shadow p-3 mb-3 bg-white rounded">
           <div class="col-12">
@@ -89,35 +80,7 @@
             </div>
           </div>
         </div>
-        <div class="row border-bottom border-dark shadow p-3 mb-3 bg-white rounded">
-          <div class="col-2" id="stats">
-            <div class="row">
-                <div class="col-md-12"><strong id="questionUpVotes">0</strong></div>
-                <div class="col-md-12"><small>votes</small></div>
-            </div>
-            <div class="row">
-                <div class="col-md-12"><strong id="questionAnswers">0</strong></div>
-                <div class="col-md-12"><small>answers</small></div>
-            </div>
-          </div>
-          <div class="col-10">
-            <div class="row">
-              <h4><a href="" id="questionHeading">Is Wicket awesome?</a></h4>
-            </div>
-            <div class="row">
-              <p id="questionIssue" class="text-truncate">Wicket is awesome. Wicket is awesome. Wicket is awesome. Wicket is awesome. Wicket is awesome. Wicket is awesome</p>
-            </div>
-            <div class="row">
-              <div class="col-8">
-                <p>Java, Wicket</p>
-              </div>
-              <div class="col-4">
-                <p class="mb-1 small">asked 21-3-2020</p>
-                <p class="mb-1">User</p>
-              </div>
-            </div>
-          </div>
-        </div>
+
       </div>
     </div>
   </div>
