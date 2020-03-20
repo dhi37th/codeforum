@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Code Forum</title>
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/home.css">
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="js/header.js"></script>
+  <script src="js/question.js"></script>
+</head>
+<body>
+<article>
+  <div class="container-fluid">
+    <div class="row mainRow">
+      <div class="col-md-8 border-bottom border-left border-dark shadow bg-white rounded">
+        <div class="row p-3">
+          <div class="col-12 border-bottom">
+            <div class="row">
+              <h1 id="questionHeading">Is Wicket Nice?</h1>
+            </div>
+            <div class="row mb-2">
+              <h6><span class="text-muted">Asked </span><span id="questionUpdatedAt">22-03-2015 11:02</span>
+              </h6>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-2" id="upVoteSpinner">
+            <div class="row m-1">
+              <div class="col-md-12">
+                <button onclick="increaseUpvote(1)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20">
+                    <polygon points="2,18 18,18 10,4"></polygon>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="row m-1">
+              <div class="col-md-12"><span id="questionUpVotes">10</span></div>
+            </div>
+            <div class="row m-1">
+              <div class="col-md-12">
+                <button onclick="increaseUpvote(-1)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20">
+                    <polygon points="2,4 18,4 10,18"></polygon>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-10">
+            <div class="row">
+              <p id="questionIssue">Is wicket really nice and bla bla bla</p>
+            </div>
+            <div class="row">
+              <div class="col-8">
+                <p><small class='tag-item mr-2 p-1'>java</small><small class='tag-item mr-2 p-1'>wicket</small>
+                </p>
+              </div>
+              <div class="col-2">
+                <p class="mb-1 small">updated <span id="questionUpdated">23-03-2020 11:03</span></p>
+                <p class="mb-1 small"><span id="questionUpdatedBy">User</span></p>
+              </div>
+              <div class="col-2">
+                <p class="mb-1 small">asked <span id="questionAsked">21-03-2020 11:03</span></p>
+                <p class="mb-1 small"><span id="questionAskedBy">Admin</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+</body>
+</html>

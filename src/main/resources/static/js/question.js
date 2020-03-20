@@ -1,8 +1,14 @@
 var allQuestionArray = [];
 
 $(function(){
-    getQuestions();
+
 });
+
+function increaseUpvote(incrementor){
+  var voteValue = parseInt($('#questionUpVotes').text());
+  voteValue += incrementor;
+  $('#questionUpVotes').text(voteValue);
+}
 
 function createQuestionSkeleton(){
     if(!allQuestionArray.length > 0) return;
@@ -14,7 +20,7 @@ function createQuestionDiv(question){
   //$('#questionColumn').empty();
   $('#noOfQuestions').html(allQuestionArray.length);
   var questionRow =
-  "<div class='row border-bottom border-dark shadow p-3 mb-3 bg-white rounded'>"+
+  "<div class='row border-bottom border-left border-dark shadow p-3 mb-3 bg-white rounded'>"+
     "<div class='col-2' id='stats'>"+
       "<div class='row'>"+
         "<div class='col-md-12'><strong id='questionUpVotes'>"+question.upVote+"</strong></div>"+
@@ -57,7 +63,7 @@ function createQuestionTag(tag){
    });
   return tagHtml;
 }
-function getQuestions(){
+function getAllQuestions(){
   $.ajax({
   		type: 'GET',
   		url: 'api/questions/all',

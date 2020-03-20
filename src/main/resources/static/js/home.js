@@ -1,22 +1,7 @@
 $(function(){
-$('#leftNav a').click(function(e){
-  e.preventDefault();
-  if($(this).hasClass('active')) return; // if already active return
+//Get all questions for home
+getAllQuestions();
 
-  $('.nav-link').removeClass('active');
-  $(this).addClass('active');
-  console.log('clicked '+this.id);
-});
-
-$('#sidebarToggle').click(function(e){
-  e.preventDefault();
-  console.log('sidebar clicked');
-});
-
-$('#searchButtonToggle').click(function(e){
-  e.preventDefault();
-  console.log('search clicked');
-});
 });
 
 function showAlertModal(message){
