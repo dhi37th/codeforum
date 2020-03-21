@@ -25,10 +25,30 @@ body{
   background-color:#e9ecef;
 }
 
-#questionIssue{
-  margin-right:20%;
-}
-
 .tag-item{
   background-color: #87CEEB;
+}
+
+.commentList{
+  padding-inline-start: 0 !important;
+  display:grid;
+  list-style-type:none;
+  font-size:.8em;
+}
+
+.btn-comment{
+  padding:0;
+  line-height:1;
+}
+
+.mr-n5{
+  margin-right: -5em !important;
+}
+
+.lh-2{
+  line-height: 2 !important;
+}
+
+hr{
+  border-top: 2px solid rgba(0,0,0,.1) !important;
 }

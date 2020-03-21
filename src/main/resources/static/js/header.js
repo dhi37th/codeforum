@@ -67,7 +67,7 @@ var header =
 $('body').prepend(header);
 
 var sideNav =
-"<div class='col-md-2'>"+
+"<div class='col-lg-2 col-md-1'>"+
 "<nav class='navbar navbar-expand-lg sticky-top side-sticky'>"+
   "<div class='collapse navbar-collapse'>"+
     "<ul class='nav nav-pills flex-md-row' id='leftNav'>"+
