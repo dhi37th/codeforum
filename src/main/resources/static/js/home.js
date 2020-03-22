@@ -27,14 +27,14 @@ function createAllQuestionDiv(question){
         "<h4><a href='question?id="+question.id+"'>"+question.heading+"</a></h4>"+
       "</div>"+
       "<div class='row'>"+
-        "<p class='text-truncate mr-5'>"+question.issue+"</p>"+
+        "<p class='text-truncate mr-5'>"+question.text+"</p>"+
       "</div>"+
       "<div class='row'>"+
         "<div class='col-8'>"+
           ""+createAllQuestionTag(question.tag)+""+
         "</div>"+
         "<div class='col-4'>"+
-          "<p class='mb-1 small'>asked "+question.updatedAt+"</p>"+
+          "<p class='mb-1 small'>asked "+question.createdAt+"</p>"+
           "<p class='mb-1'>User</p>"+
         "</div>"+
       "</div>"+
@@ -44,6 +44,7 @@ function createAllQuestionDiv(question){
 }
 
 function createAllQuestionTag(tag){
+  if(tag==undefined || tag==null || tag=='null') return;
   var tagHtml = '';
   var chars = tag.split(',');
   chars.forEach(t => {

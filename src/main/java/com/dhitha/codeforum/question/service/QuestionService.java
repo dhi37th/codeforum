@@ -3,8 +3,6 @@ package com.dhitha.codeforum.question.service;
 import com.dhitha.codeforum.question.model.Question;
 import java.util.List;
 import java.util.Optional;
-import org.aspectj.weaver.Lint;
-import org.springframework.data.domain.Page;
 
 public interface QuestionService {
 
@@ -29,7 +27,7 @@ public interface QuestionService {
    *
    * @param questionId id of question to delete
    */
-  void deleteQuestion(Long questionId);
+  boolean deleteQuestion(Long questionId);
 
   /**
    * Get all question tagged to a user
@@ -37,7 +35,7 @@ public interface QuestionService {
    * @param userId id of user
    * @return ArrayList
    */
-  Optional<List<Question>> getAllQuestionsOfUser(Long userId);
+  Optional<List<Question>> getAllCreatedBy(Long userId);
 
   /**
    * Get all question in forum
@@ -55,19 +53,20 @@ public interface QuestionService {
   Optional<Question> getQuestionById(Long questionId);
 
   /**
-   * Return list of all question of a user based on pagination
-   *
-   * @param pageNumber pageNumber
-   * @param limit limit
-   * @return Page
+   * Find all questions with page limits
+   * @param limit no of records to return
+   * @param offset offset from where to return
+   * @return List (may be empty list if no questions found)
    */
-  Page<Question> getAllQuestionsOfUser(int pageNumber, int limit, Long userId);
+  List<Question> getAll(int limit, int offset);
 
   /**
-   * Return list of all question based on pagination
-   * @param pageNumber
-   * @param limit
-   * @return
+   * Find all created by with page limits
+   * @param limit no of record to return
+   * @param offset offset from where to return
+   * @param userId user id
+   * @return List
    */
-  Page<Question> getAllQuestions(int pageNumber, int limit);
+  List<Question> getAllCreatedBy(int limit, int offset,Long userId);
+
 }

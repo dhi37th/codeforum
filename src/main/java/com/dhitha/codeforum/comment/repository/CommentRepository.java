@@ -3,11 +3,10 @@ package com.dhitha.codeforum.comment.repository;
 import com.dhitha.codeforum.comment.model.Comment;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CommentRepository extends JpaRepository<Comment, Long> {
+public interface CommentRepository {
 
   /**
    * Find the comments per question id

@@ -2,28 +2,70 @@ package com.dhitha.codeforum.question.repository;
 
 import com.dhitha.codeforum.question.model.Question;
 import java.util.List;
-import java.util.Optional;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 
-@Repository
-public interface QuestionRepository extends JpaRepository<Question, Long> {
+public interface QuestionRepository {
+
+  /**
+   * Find question by id
+   *
+   * @param questionId question id
+   * @return Question
+   */
+  Question findById(Long questionId) throws IncorrectResultSizeDataAccessException;
+
+  /**
+   * Find all questions
+   *
+   * @return List (may be empty list if no questions found)
+   */
+  List<Question> findAll();
 
   /**
    * Find all questions created by user
+   *
    * @param userId userId
-   * @return Optional
+   * @return List (may be empty list if no questions found)
    */
-  Optional<List<Question>> findAllByCreatedBy(Long userId);
+  List<Question> findAllCreatedBy(Long userId);
 
   /**
-   * Find all questions created by user
-   * @param userId userId
-   * @param pageable pageable
-   * @return Page
+   * Find all questions with page limits
+   * @param limit no of records to return
+   * @param offset offset from where to return
+   * @return List (may be empty list if no questions found)
    */
-  Page<Question> findAllByCreatedBy(Long userId,Pageable pageable);
+  List<Question> findAll(int limit, int offset);
 
+  /**
+   * Find all created by with page limits
+   * @param limit no of record to return
+   * @param offset offset from where to return
+   * @param userId user id
+   * @return List
+   */
+  List<Question> findAllCreatedBy(int limit, int offset,Long userId);
+
+  /**
+   * Save the question
+   *
+   * @param question question
+   * @return Question
+   */
+  Question save(Question question);
+
+  /**
+   * Update the question
+   *
+   * @param question question
+   * @return Question
+   */
+  Question update(Question question);
+
+  /**
+   * Delete the question
+   *
+   * @param questionId question id
+   */
+  boolean delete(Long questionId);
 }

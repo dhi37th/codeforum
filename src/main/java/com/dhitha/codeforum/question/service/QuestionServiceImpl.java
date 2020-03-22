@@ -1,17 +1,14 @@
 package com.dhitha.codeforum.question.service;
 
-import com.dhitha.codeforum.common.component.RepositoryUtility;
+import com.dhitha.codeforum.common.component.SessionInfo;
 import com.dhitha.codeforum.question.model.Question;
 import com.dhitha.codeforum.question.repository.QuestionRepository;
-import java.util.Collections;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,55 +17,60 @@ public class QuestionServiceImpl implements QuestionService {
 
   @Autowired QuestionRepository questionRepository;
 
+  @Autowired SessionInfo sessionInfo;
+
   @Override
   public Question addQuestion(Question question) {
-    return questionRepository.saveAndFlush(question);
+    question.setCreatedBy(sessionInfo.getSessionUser().getId());
+    question.setCreatedAt(LocalDateTime.now());
+    return questionRepository.save(question);
   }
 
   @Override
   public Question updateQuestion(Question question) {
-    return questionRepository
-        .findById(question.getId())
-        .map(
-            existingQuestion -> {
-              String[] ignoreProperties = RepositoryUtility.getNullPropertyNames(question);
-              BeanUtils.copyProperties(question, existingQuestion, ignoreProperties);
-              log.info(existingQuestion);
-              return questionRepository.saveAndFlush(existingQuestion);
-            })
-        .orElse(null);
+    return null;
   }
 
   @Override
-  public void deleteQuestion(Long questionId) {
-    questionRepository.deleteById(questionId);
+  public boolean deleteQuestion(Long questionId) {
+    //delete all question comments
+    //delete all answer comments
+    //delete all answers
+    return questionRepository.delete(questionId);
   }
 
   @Override
-  public Optional<List<Question>> getAllQuestionsOfUser(Long userId) {
-    return questionRepository.findAllByCreatedBy(userId);
+  public Optional<List<Question>> getAllCreatedBy(Long userId) {
+    List<Question> questions = questionRepository.findAllCreatedBy(userId);
+    if(questions.isEmpty()) return Optional.empty();
+    return Optional.of(questions);
   }
 
   @Override
   public Optional<List<Question>> getAllQuestions() {
     List<Question> questions = questionRepository.findAll();
-    return Optional.ofNullable(questions.equals(Collections.emptyList()) ? null : questions);
+    if(questions.isEmpty()) return Optional.empty();
+    return Optional.of(questions);
   }
 
   @Override
   public Optional<Question> getQuestionById(Long questionId) {
-    return questionRepository.findById(questionId);
+    try{
+     Question question = questionRepository.findById(questionId);
+     return Optional.ofNullable(question);
+    }catch (IncorrectResultSizeDataAccessException e){
+      log.error("Error in fetching question with id "+questionId,e);
+      return Optional.empty();
+    }
   }
 
   @Override
-  public Page<Question> getAllQuestionsOfUser(int pageNumber, int limit, Long userId) {
-    Pageable pageable = PageRequest.of(pageNumber, limit);
-    return questionRepository.findAllByCreatedBy(userId, pageable);
+  public List<Question> getAll(int limit, int offset) {
+    return questionRepository.findAll(limit, offset);
   }
 
   @Override
-  public Page<Question> getAllQuestions(int pageNumber, int limit) {
-    Pageable pageable = PageRequest.of(pageNumber, limit);
-    return questionRepository.findAll(pageable);
+  public List<Question> getAllCreatedBy(int limit, int offset, Long userId) {
+    return questionRepository.findAllCreatedBy(limit, offset, userId);
   }
 }

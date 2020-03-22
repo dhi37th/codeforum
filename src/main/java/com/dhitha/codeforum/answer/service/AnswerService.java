@@ -1,9 +1,9 @@
 package com.dhitha.codeforum.answer.service;
 
 import com.dhitha.codeforum.answer.model.Answer;
+import com.dhitha.codeforum.common.model.ResourceNotFoundException;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.data.domain.Page;
 
 public interface AnswerService {
 
@@ -21,14 +21,14 @@ public interface AnswerService {
    * @param answer Answer to update
    * @return Answer
    */
-  Answer updateAnswer(Answer answer);
+  Answer updateAnswer(Answer answer) throws ResourceNotFoundException;
 
   /**
    * Delete a Answer
    *
    * @param answerId id of Answer to delete
    */
-  void deleteAnswer(Long answerId);
+  void deleteAnswer(Long answerId) throws ResourceNotFoundException;
 
   /**
    * Get all Answer tagged to a user
@@ -36,7 +36,7 @@ public interface AnswerService {
    * @param questionId id of user
    * @return ArrayList
    */
-  Optional<List<Answer>> getAllAnswersOfQuestion(Long questionId);
+  List<Answer> getAllAnswersOfQuestion(Long questionId) throws ResourceNotFoundException;
 
   /**
    * Get a Answer by id & question id
@@ -45,7 +45,7 @@ public interface AnswerService {
    * @param answerId id
    * @return Optional
    */
-  Optional<Answer> getAnswerById(Long questionId, Long answerId);
+  Answer getAnswerById(Long questionId, Long answerId) throws ResourceNotFoundException;
 
   /**
    * Get a answer by id
@@ -53,15 +53,6 @@ public interface AnswerService {
    * @param answerId
    * @return
    */
-  Optional<Answer> getAnswerById(Long answerId);
+  Answer getAnswerById(Long answerId) throws ResourceNotFoundException;
 
-  /**
-   * Return list of all Answer of a user based on pagination
-   *
-   * @param pageNumber pageNumber
-   * @param limit limit
-   * @param questionId questionId
-   * @return Page
-   */
-  Page<Answer> getAllAnswersOfQuestion(int pageNumber, int limit, Long questionId);
 }

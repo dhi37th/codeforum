@@ -3,35 +3,55 @@ package com.dhitha.codeforum.answer.repository;
 import com.dhitha.codeforum.answer.model.Answer;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface AnswerRepository extends JpaRepository<Answer, Long> {
+public interface AnswerRepository {
 
   /**
    * Find the answer per question id
    * @param questionId question id
    * @return List
    */
-  Optional<List<Answer>> findByQuestionId(Long questionId);
-
-  /**
-   * Find the answer per question id
-   *
-   * @param questionId question id
-   * @param pageable per page data
-   * @return Page
-   */
-  Page<Answer> findByQuestionId(Long questionId, Pageable pageable);
+  List<Answer> findByQuestionId(Long questionId);
 
   /**
    * Find answer by answer & question id
    * @param answerId answer id
    * @param questionId question id
-   * @return
+   * @return Optional
    */
-  Optional<Answer> findByIdAndQuestionId(Long answerId, Long questionId);
+  Answer findByIdAndQuestionId(Long answerId, Long questionId);
+
+  /**
+   * Save an answer
+   * @param answer answer
+   * @return Answer
+   */
+  Answer save(Answer answer);
+
+  /**
+   * Update an answer
+   * @param answer anser
+   * @return Answer
+   */
+  Answer update(Answer answer);
+
+  /**
+   * Find an answer
+   * @param answerId answerId
+   * @return Optional
+   */
+  Answer findById(Long answerId);
+
+  /**
+   * Delete an answer
+   * @param answerId answer id
+   */
+  void deleteById(Long answerId);
+
+  /**
+   * Delete all answer of a question
+   * @param questionId question id
+   */
+  void deleteAllOfQuestion(Long questionId);
 }

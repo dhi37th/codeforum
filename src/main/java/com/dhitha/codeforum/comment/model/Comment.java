@@ -4,46 +4,24 @@ import com.dhitha.codeforum.answer.model.Answer;
 import com.dhitha.codeforum.common.model.Audit;
 import com.dhitha.codeforum.question.model.Question;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
-@Entity
-@Table(name = "comment")
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 public class Comment extends Audit {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column
   private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = true)
-  @JoinColumn(name = "question_id")
-  @OnDelete(action = OnDeleteAction.CASCADE)
   @JsonIgnore
   private Question question;
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = true)
-  @JoinColumn(name = "answer_id")
-  @OnDelete(action = OnDeleteAction.CASCADE)
   @JsonIgnore
   private Answer answer;
 
-  @Column @NotNull @Lob private String text;
+  @NotNull private String text;
 
-  @Column private Long upVote;
+  private Long upVote;
 }

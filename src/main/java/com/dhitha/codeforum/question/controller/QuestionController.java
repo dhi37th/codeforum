@@ -44,7 +44,7 @@ public class QuestionController {
     if (sessionInfo.getSessionUser() != null) {
       Long userId = sessionInfo.getSessionUser().getId();
       return questionService
-          .getAllQuestionsOfUser(userId)
+          .getAllCreatedBy(userId)
           .map(ResponseEntity::ok)
           .orElseThrow(
               () -> new ResourceNotFoundException("Question not found for userId: " + userId));

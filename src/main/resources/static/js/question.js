@@ -13,6 +13,7 @@ function increaseUpvote(incrementor){
   voteValue += incrementor;
   $('#questionUpVotes').text(voteValue);
 }
+
 function getQuestion(questionId){
 $.ajax({
   		type: 'GET',

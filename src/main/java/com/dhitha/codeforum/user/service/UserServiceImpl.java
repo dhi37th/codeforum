@@ -8,8 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
 
-  @Autowired
-  UserRepository userRepository;
+  @Autowired UserRepository userRepository;
 
   @Override
   public User findByLoginId(String loginId) {
@@ -18,11 +17,9 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User addUser(User user) {
-    return userRepository.save(user);
+    return null;
   }
 
   @Override
-  public void deleteUser(Long userId) {
-     userRepository.deleteById(userId);
-  }
+  public void deleteUser(Long userId) {}
 }

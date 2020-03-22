@@ -26,7 +26,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequestMapping("api/questions/{questionId}/answers")
 @Log4j2
 public class AnswerController {
-
+/*
   @Autowired AnswerService answerService;
 
   @Autowired QuestionService questionService;
@@ -97,5 +97,5 @@ public class AnswerController {
     return Optional.of(answerService.updateAnswer(answer))
         .map(ResponseEntity::ok)
         .orElseThrow(() -> new ResourceNotFoundException("Answer not found for id: " + answerId));
-  }
+  }*/
 }

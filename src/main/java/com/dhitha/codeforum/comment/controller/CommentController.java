@@ -27,7 +27,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequestMapping
 public class CommentController {
 
-  @Autowired CommentService commentService;
+  /*@Autowired CommentService commentService;
 
   @Autowired QuestionService questionService;
 
@@ -133,5 +133,5 @@ public class CommentController {
       @PathVariable(value = "commentId") Long commentId) {
     commentService.deleteComment(commentId);
     return ResponseEntity.noContent().build();
-  }
+  }*/
 }

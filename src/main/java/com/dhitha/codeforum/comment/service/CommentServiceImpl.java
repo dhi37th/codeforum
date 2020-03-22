@@ -12,38 +12,28 @@ import org.springframework.stereotype.Service;
 @Service
 public class CommentServiceImpl implements CommentService {
 
-  @Autowired CommentRepository commentRepository;
-
   @Override
   public Optional<List<Comment>> getCommentOfQuestion(Long questionId) {
-    return commentRepository.findByQuestionId(questionId);
+    return Optional.empty();
   }
 
   @Override
   public Optional<List<Comment>> getCommentOfAnswer(Long answerId) {
-    return commentRepository.findByAnswerId(answerId);
+    return Optional.empty();
   }
 
   @Override
   public Comment addComment(Comment comment) {
-    return commentRepository.saveAndFlush(comment);
+    return null;
   }
 
   @Override
   public Comment updateComment(Comment comment) {
-    return commentRepository
-        .findById(comment.getId())
-        .map(
-            existingComment -> {
-              String[] ignoreProperties = RepositoryUtility.getNullPropertyNames(comment);
-              BeanUtils.copyProperties(comment, existingComment, ignoreProperties);
-              return commentRepository.saveAndFlush(existingComment);
-            })
-        .orElse(null);
+    return null;
   }
 
   @Override
   public void deleteComment(Long commentId) {
-    commentRepository.deleteById(commentId);
+
   }
 }
