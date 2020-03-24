@@ -1,9 +1,10 @@
 package com.dhitha.codeforum.user.service;
 
 import com.dhitha.codeforum.user.model.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 /** User related services */
-public interface UserService {
+public interface UserService extends UserDetailsService {
 
   /**
    * Find user by login id

@@ -1,6 +1,7 @@
-package com.dhitha.codeforum.common.config.security;
+package com.dhitha.codeforum.common.config;
 
 import com.dhitha.codeforum.common.component.EncryptionUtil;
+import com.dhitha.codeforum.user.service.UserService;
 import java.security.GeneralSecurityException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -8,14 +9,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
   private static final String LOGIN_URL = "/login";
-  @Autowired SecurityUserDetailService securityUserDetailService;
+  @Autowired UserService userService;
   @Autowired EncryptionUtil encryptionUtil;
 
   @Override
@@ -78,7 +78,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Bean
   public DaoAuthenticationProvider authProvider() {
     DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-    authProvider.setUserDetailsService(securityUserDetailService);
+    authProvider.setUserDetailsService(userService);
     authProvider.setPasswordEncoder(passwordEncoder());
     return authProvider;
   }

@@ -3,7 +3,7 @@ package com.dhitha.codeforum.answer.service;
 import com.dhitha.codeforum.answer.model.Answer;
 import com.dhitha.codeforum.answer.repository.AnswerRepository;
 import com.dhitha.codeforum.comment.service.AnswerCommentService;
-import com.dhitha.codeforum.common.component.SessionInfo;
+import com.dhitha.codeforum.common.component.SessionUtil;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -20,11 +20,12 @@ public class AnswerServiceImpl implements AnswerService {
 
   @Autowired AnswerCommentService answerCommentService;
 
-  @Autowired SessionInfo sessionInfo;
+  @Autowired
+  SessionUtil sessionUtil;
 
   @Override
   public Answer addAnswer(Answer answer) {
-    answer.setCreatedBy(sessionInfo.getSessionUser().getId());
+    answer.setCreatedBy(sessionUtil.getSessionUser().getId());
     answer.setCreatedAt(LocalDateTime.now());
     return answerRepository.save(answer);
   }
@@ -32,7 +33,7 @@ public class AnswerServiceImpl implements AnswerService {
   @Override
   public Optional<Answer> updateAnswer(Answer answer) {
     try {
-      answer.setUpdatedBy(sessionInfo.getSessionUser().getId());
+      answer.setUpdatedBy(sessionUtil.getSessionUser().getId());
       answer.setUpdatedAt(LocalDateTime.now());
       return Optional.of(answerRepository.update(answer));
     } catch (EmptyResultDataAccessException e) {

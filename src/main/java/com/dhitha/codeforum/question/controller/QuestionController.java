@@ -1,6 +1,6 @@
 package com.dhitha.codeforum.question.controller;
 
-import com.dhitha.codeforum.common.component.SessionInfo;
+import com.dhitha.codeforum.common.component.SessionUtil;
 import com.dhitha.codeforum.common.model.ResourceNotFoundException;
 import com.dhitha.codeforum.question.model.Question;
 import com.dhitha.codeforum.question.service.QuestionService;
@@ -28,7 +28,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 public class QuestionController {
   @Autowired QuestionService questionService;
 
-  @Autowired SessionInfo sessionInfo;
+  @Autowired
+  SessionUtil sessionUtil;
 
   // Get question by Id
   @GetMapping(value = "{questionId}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -45,8 +46,8 @@ public class QuestionController {
   public ResponseEntity<List<Question>> getAllQuestionOfUser(
       @RequestParam(value = "limit", required = false, defaultValue = "0") int limit,
       @RequestParam(value = "offset", required = false, defaultValue = "0") int offset) {
-    if (sessionInfo.getSessionUser() != null) {
-      Long userId = sessionInfo.getSessionUser().getId();
+    if (sessionUtil.getSessionUser() != null) {
+      Long userId = sessionUtil.getSessionUser().getId();
       return questionService
           .getAllCreatedBy(limit, offset, userId)
           .map(ResponseEntity::ok)

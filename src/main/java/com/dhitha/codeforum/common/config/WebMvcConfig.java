@@ -1,4 +1,4 @@
-package com.dhitha.codeforum.common.config.web;
+package com.dhitha.codeforum.common.config;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;

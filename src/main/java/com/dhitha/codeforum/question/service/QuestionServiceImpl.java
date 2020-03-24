@@ -3,7 +3,7 @@ package com.dhitha.codeforum.question.service;
 import com.dhitha.codeforum.answer.service.AnswerService;
 import com.dhitha.codeforum.comment.service.AnswerCommentService;
 import com.dhitha.codeforum.comment.service.QuestionCommentService;
-import com.dhitha.codeforum.common.component.SessionInfo;
+import com.dhitha.codeforum.common.component.SessionUtil;
 import com.dhitha.codeforum.question.model.Question;
 import com.dhitha.codeforum.question.repository.QuestionRepository;
 import java.time.LocalDateTime;
@@ -26,11 +26,11 @@ public class QuestionServiceImpl implements QuestionService {
 
   @Autowired AnswerCommentService answerCommentService;
 
-  @Autowired SessionInfo sessionInfo;
+  @Autowired SessionUtil sessionUtil;
 
   @Override
   public Question addQuestion(Question question) {
-    question.setCreatedBy(sessionInfo.getSessionUser().getId());
+    question.setCreatedBy(sessionUtil.getSessionUser().getId());
     question.setCreatedAt(LocalDateTime.now());
     return questionRepository.save(question);
   }
@@ -38,7 +38,7 @@ public class QuestionServiceImpl implements QuestionService {
   @Override
   public Optional<Question> updateQuestion(Question question) {
     try {
-      question.setUpdatedBy(sessionInfo.getSessionUser().getId());
+      question.setUpdatedBy(sessionUtil.getSessionUser().getId());
       question.setUpdatedAt(LocalDateTime.now());
       question = questionRepository.update(question);
       return Optional.of(question);
@@ -50,10 +50,7 @@ public class QuestionServiceImpl implements QuestionService {
 
   @Override
   public boolean deleteQuestion(Long questionId) {
-    // delete all question comments
     questionCommentService.deleteAllComment(questionId);
-    log.info("question comment deleted");
-    // delete all answer comments
     answerService
         .getAllAnswersOfQuestion(questionId)
         .ifPresent(
@@ -63,8 +60,6 @@ public class QuestionServiceImpl implements QuestionService {
                       answerCommentService.deleteAllComment(
                           answer.getQuestionId(), answer.getId()));
             });
-    log.info("answer comment deleted");
-    // delete all answers
     answerService.deleteAllAnswer(questionId);
     return questionRepository.delete(questionId);
   }
@@ -87,7 +82,6 @@ public class QuestionServiceImpl implements QuestionService {
   public Optional<Question> getQuestionById(Long questionId) {
     try {
       Question question = questionRepository.findById(questionId);
-      log.info("getQuestionById question "+question);
       return Optional.of(question);
     } catch (IncorrectResultSizeDataAccessException e) {
       log.error("Error in fetching question with id " + questionId, e);

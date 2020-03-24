@@ -2,7 +2,7 @@ package com.dhitha.codeforum.comment.service;
 
 import com.dhitha.codeforum.comment.model.Comment;
 import com.dhitha.codeforum.comment.repository.AnswerCommentRepository;
-import com.dhitha.codeforum.common.component.SessionInfo;
+import com.dhitha.codeforum.common.component.SessionUtil;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +16,8 @@ import org.springframework.stereotype.Service;
 public class AnswerCommentServiceImpl implements AnswerCommentService {
 
   @Autowired AnswerCommentRepository answerCommentRepository;
-  @Autowired SessionInfo sessionInfo;
+  @Autowired
+  SessionUtil sessionUtil;
 
   @Override
   public Optional<List<Comment>> getAllComments(Long questionId, Long answerId) {
@@ -38,7 +39,7 @@ public class AnswerCommentServiceImpl implements AnswerCommentService {
 
   @Override
   public Comment addComment(Comment comment) {
-    comment.setCreatedBy(sessionInfo.getSessionUser().getId());
+    comment.setCreatedBy(sessionUtil.getSessionUser().getId());
     comment.setCreatedAt(LocalDateTime.now());
     return answerCommentRepository.save(comment);
   }
@@ -46,7 +47,7 @@ public class AnswerCommentServiceImpl implements AnswerCommentService {
   @Override
   public Optional<Comment> updateComment(Comment comment) {
     try {
-      comment.setUpdatedBy(sessionInfo.getSessionUser().getId());
+      comment.setUpdatedBy(sessionUtil.getSessionUser().getId());
       comment.setUpdatedAt(LocalDateTime.now());
       answerCommentRepository.update(comment);
       return Optional.of(comment);

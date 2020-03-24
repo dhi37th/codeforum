@@ -11,7 +11,8 @@ drop table question if exists;
 create table user(
 id identity constraint pk_user primary key,
 is_admin boolean default false,
-login_id varchar(100) not null,
+is_locked boolean default false,
+login_id varchar(100) unique not null,
 password varchar(255) not null,
 name varchar(255) not null
 );

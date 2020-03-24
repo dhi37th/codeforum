@@ -9,14 +9,13 @@ import org.springframework.web.context.annotation.SessionScope;
 
 @Component
 @SessionScope
-public class SessionInfo {
+public class SessionUtil {
   @Autowired private UserService userService;
   private User user;
 
   public User getSessionUser() {
     if (user == null) {
-       String principalName = SecurityContextHolder.getContext().getAuthentication().getName();
-       user = userService.findByLoginId(principalName);
+       user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
     return user;
   }

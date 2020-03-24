@@ -35,6 +35,7 @@ public class UserRepositoryImpl implements UserRepository {
       user.setLoginId(rs.getString("login_id"));
       user.setPassword(rs.getString("password"));
       user.setName(rs.getString("name"));
+      user.setIsLocked(rs.getBoolean("is_locked"));
       return user;
     }
   }
