@@ -20,7 +20,7 @@ public interface QuestionService {
    * @param question question to update
    * @return Question
    */
-  Question updateQuestion(Question question);
+  Optional<Question> updateQuestion(Question question);
 
   /**
    * Delete a question
@@ -58,7 +58,7 @@ public interface QuestionService {
    * @param offset offset from where to return
    * @return List (may be empty list if no questions found)
    */
-  List<Question> getAll(int limit, int offset);
+  Optional<List<Question>> getAllQuestions(int limit, int offset);
 
   /**
    * Find all created by with page limits
@@ -67,6 +67,6 @@ public interface QuestionService {
    * @param userId user id
    * @return List
    */
-  List<Question> getAllCreatedBy(int limit, int offset,Long userId);
+  Optional<List<Question>> getAllCreatedBy(int limit, int offset,Long userId);
 
 }

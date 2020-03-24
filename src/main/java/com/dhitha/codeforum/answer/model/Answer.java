@@ -1,22 +1,29 @@
 package com.dhitha.codeforum.answer.model;
 
-import com.dhitha.codeforum.common.model.Audit;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.LocalDateTime;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-public class Answer extends Audit {
+public class Answer{
   private Long id;
 
-  @JsonIgnore
   private Long questionId;
 
   @NotNull private String text;
 
   private Long upVote;
+
+  @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
+  private LocalDateTime createdAt;
+
+  @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
+  private LocalDateTime updatedAt;
+
+  private Long createdBy;
+
+  private Long updatedBy;
 }

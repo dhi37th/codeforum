@@ -3,6 +3,7 @@ package com.dhitha.codeforum.answer.repository;
 import com.dhitha.codeforum.answer.model.Answer;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 
 public interface AnswerRepository {
@@ -20,7 +21,7 @@ public interface AnswerRepository {
    * @param questionId question id
    * @return Optional
    */
-  Answer findByIdAndQuestionId(Long answerId, Long questionId);
+  Answer findById(Long answerId, Long questionId) throws EmptyResultDataAccessException;
 
   /**
    * Save an answer
@@ -34,24 +35,18 @@ public interface AnswerRepository {
    * @param answer anser
    * @return Answer
    */
-  Answer update(Answer answer);
-
-  /**
-   * Find an answer
-   * @param answerId answerId
-   * @return Optional
-   */
-  Answer findById(Long answerId);
+  Answer update(Answer answer) throws EmptyResultDataAccessException;
 
   /**
    * Delete an answer
    * @param answerId answer id
+   * @param questionId question id
    */
-  void deleteById(Long answerId);
+  boolean deleteById(Long answerId, Long questionId);
 
   /**
    * Delete all answer of a question
    * @param questionId question id
    */
-  void deleteAllOfQuestion(Long questionId);
+  boolean deleteAllOfQuestion(Long questionId);
 }

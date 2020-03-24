@@ -87,7 +87,7 @@ var questionBodyDiv=
 "  </div>"+
 "  <div class='col-10'>"+
 "    <div class='row'>"+
-"      <p id='questionIssue'>"+question.issue+"</p>"+
+"      <p>"+question.text+"</p>"+
 "    </div>"+
 "    <div class='row mr-1 pb-2 border-bottom' id='questionTagRow'>"+
 "      <div class='col-8'>"+

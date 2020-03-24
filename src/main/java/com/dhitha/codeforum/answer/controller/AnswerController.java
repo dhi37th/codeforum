@@ -3,12 +3,11 @@ package com.dhitha.codeforum.answer.controller;
 import com.dhitha.codeforum.answer.model.Answer;
 import com.dhitha.codeforum.answer.service.AnswerService;
 import com.dhitha.codeforum.common.model.ResourceNotFoundException;
-import com.dhitha.codeforum.question.service.QuestionService;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,38 +23,27 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("api/questions/{questionId}/answers")
-@Log4j2
+@Slf4j
 public class AnswerController {
-/*
   @Autowired AnswerService answerService;
 
-  @Autowired QuestionService questionService;
-
+  // Save answer
   @PostMapping(
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Answer> saveAnswer(
       @PathVariable("questionId") Long questionId, @Valid @RequestBody Answer answer) {
-
-    return questionService
-        .getQuestionById(questionId)
-        .map(
-            question -> {
-              answer.setQuestion(question);
-              Answer returnedAnswer = answerService.addAnswer(answer);
-              URI uri =
-                  ServletUriComponentsBuilder.fromCurrentRequest()
-                      .path("/{id}")
-                      .buildAndExpand(returnedAnswer.getId())
-                      .toUri();
-              return ResponseEntity.created(uri).body(returnedAnswer);
-            })
-        .orElseThrow(
-            () ->
-                new ResourceNotFoundException(
-                    "Answer cannot be added as question not found for id " + questionId));
+    answer.setQuestionId(questionId);
+    Answer returnedAnswer = answerService.addAnswer(answer);
+    URI uri =
+        ServletUriComponentsBuilder.fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(returnedAnswer.getId())
+            .toUri();
+    return ResponseEntity.created(uri).body(returnedAnswer);
   }
 
+  // Get all answer for question
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<Answer>> getAnswersForQuestion(
       @PathVariable("questionId") Long questionId) {
@@ -66,6 +54,7 @@ public class AnswerController {
             () -> new ResourceNotFoundException("No answer found for question id: " + questionId));
   }
 
+  // Get answer by id
   @GetMapping(value = "/{answerId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Answer> getAnswerById(
       @PathVariable("questionId") Long questionId, @PathVariable("answerId") Long answerId) {
@@ -77,13 +66,15 @@ public class AnswerController {
             () -> new ResourceNotFoundException("No answer found for question id: " + questionId));
   }
 
+  // delete answer by id
   @DeleteMapping(value = "/{answerId}")
   public ResponseEntity<Void> deleteAnswer(
       @PathVariable("questionId") Long questionId, @PathVariable("answerId") Long answerId) {
-    answerService.deleteAnswer(answerId);
+    answerService.deleteAnswer(answerId, questionId);
     return ResponseEntity.noContent().build();
   }
 
+  // Update answer
   @PutMapping(
       value = "{answerId}",
       consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -93,9 +84,9 @@ public class AnswerController {
       @PathVariable("answerId") Long answerId,
       @Valid @RequestBody Answer answer) {
     answer.setId(answerId);
-    answer.setQuestion(questionService.getQuestionById(questionId).orElse(null));
-    return Optional.of(answerService.updateAnswer(answer))
+    answer.setQuestionId(questionId);
+    return answerService.updateAnswer(answer)
         .map(ResponseEntity::ok)
         .orElseThrow(() -> new ResourceNotFoundException("Answer not found for id: " + answerId));
-  }*/
+  }
 }

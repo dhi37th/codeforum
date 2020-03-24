@@ -2,49 +2,82 @@ package com.dhitha.codeforum.answer.service;
 
 import com.dhitha.codeforum.answer.model.Answer;
 import com.dhitha.codeforum.answer.repository.AnswerRepository;
-import com.dhitha.codeforum.common.component.RepositoryUtility;
-import com.dhitha.codeforum.common.model.ResourceNotFoundException;
+import com.dhitha.codeforum.comment.service.AnswerCommentService;
+import com.dhitha.codeforum.common.component.SessionInfo;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.beans.BeanUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class AnswerServiceImpl implements AnswerService {
 
   @Autowired AnswerRepository answerRepository;
 
+  @Autowired AnswerCommentService answerCommentService;
+
+  @Autowired SessionInfo sessionInfo;
+
   @Override
-  public  Answer addAnswer(Answer answer) {
+  public Answer addAnswer(Answer answer) {
+    answer.setCreatedBy(sessionInfo.getSessionUser().getId());
+    answer.setCreatedAt(LocalDateTime.now());
     return answerRepository.save(answer);
   }
 
   @Override
-  public Answer updateAnswer(Answer answer) {
-    return answerRepository.update(answer);
+  public Optional<Answer> updateAnswer(Answer answer) {
+    try {
+      answer.setUpdatedBy(sessionInfo.getSessionUser().getId());
+      answer.setUpdatedAt(LocalDateTime.now());
+      return Optional.of(answerRepository.update(answer));
+    } catch (EmptyResultDataAccessException e) {
+      log.error(
+          "Error in fetching answer with question id: {}, answer id: {}" + answer.getQuestionId(),
+          answer.getId(),
+          e);
+      return Optional.empty();
+    }
   }
 
   @Override
-  public void deleteAnswer(Long answerId) {
-    answerRepository.deleteById(answerId);
+  public void deleteAnswer(Long answerId, Long questionId) {
+    // delete all comments of answer
+    answerCommentService.deleteAllComment(questionId, answerId);
+    answerRepository.deleteById(answerId, questionId);
   }
 
   @Override
-  public List<Answer> getAllAnswersOfQuestion(Long questionId) {
+  public void deleteAllAnswer(Long questionId) {
+    getAllAnswersOfQuestion(questionId)
+        .ifPresent(
+            answers -> {
+              answers.forEach(
+                  answer -> answerCommentService.deleteAllComment(questionId, answer.getId()));
+            });
+    answerRepository.deleteAllOfQuestion(questionId);
+  }
+
+  @Override
+  public Optional<List<Answer>> getAllAnswersOfQuestion(Long questionId) {
     List<Answer> answerList = answerRepository.findByQuestionId(questionId);
-    if(answerList.isEmpty()) throw new ResourceNotFoundException("Answers not found for question id "+questionId);
-    return answerList;
+    if (answerList.isEmpty()) return Optional.empty();
+    return Optional.of(answerList);
   }
 
   @Override
-  public Answer getAnswerById(Long questionId, Long answerId) {
-    return answerRepository.findByIdAndQuestionId(answerId, questionId);
+  public Optional<Answer> getAnswerById(Long answerId, Long questionId) {
+    try {
+      Answer answer = answerRepository.findById(answerId, questionId);
+      return Optional.ofNullable(answer);
+    } catch (EmptyResultDataAccessException e) {
+      log.error(
+          "Error in fetching answer with question id: {}, answer id: {}" + questionId, answerId, e);
+      return Optional.empty();
+    }
   }
-
-  @Override
-  public Answer getAnswerById(Long answerId) {
-    return answerRepository.findById(answerId);
-  }
-
 }

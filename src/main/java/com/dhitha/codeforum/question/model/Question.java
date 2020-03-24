@@ -1,16 +1,15 @@
 package com.dhitha.codeforum.question.model;
 
-import com.dhitha.codeforum.common.model.Audit;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.LocalDateTime;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class Question extends Audit {
+public class Question{
   private Long id;
 
   @NotNull @NotEmpty private String tag;
@@ -20,4 +19,14 @@ public class Question extends Audit {
   @NotNull @NotEmpty private String heading;
 
   private Long upVote;
+
+  @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
+  private LocalDateTime createdAt;
+
+  @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
+  private LocalDateTime updatedAt;
+
+  private Long createdBy;
+
+  private Long updatedBy;
 }

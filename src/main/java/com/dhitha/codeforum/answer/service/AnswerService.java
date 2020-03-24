@@ -1,7 +1,6 @@
 package com.dhitha.codeforum.answer.service;
 
 import com.dhitha.codeforum.answer.model.Answer;
-import com.dhitha.codeforum.common.model.ResourceNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,14 +20,21 @@ public interface AnswerService {
    * @param answer Answer to update
    * @return Answer
    */
-  Answer updateAnswer(Answer answer) throws ResourceNotFoundException;
+  Optional<Answer> updateAnswer(Answer answer);
 
   /**
    * Delete a Answer
    *
    * @param answerId id of Answer to delete
    */
-  void deleteAnswer(Long answerId) throws ResourceNotFoundException;
+  void deleteAnswer(Long answerId, Long questionId);
+
+  /**
+   * Delete all answer for a question
+   *
+   * @param questionId question id
+   */
+  void deleteAllAnswer(Long questionId);
 
   /**
    * Get all Answer tagged to a user
@@ -36,7 +42,7 @@ public interface AnswerService {
    * @param questionId id of user
    * @return ArrayList
    */
-  List<Answer> getAllAnswersOfQuestion(Long questionId) throws ResourceNotFoundException;
+  Optional<List<Answer>> getAllAnswersOfQuestion(Long questionId);
 
   /**
    * Get a Answer by id & question id
@@ -45,14 +51,5 @@ public interface AnswerService {
    * @param answerId id
    * @return Optional
    */
-  Answer getAnswerById(Long questionId, Long answerId) throws ResourceNotFoundException;
-
-  /**
-   * Get a answer by id
-   *
-   * @param answerId
-   * @return
-   */
-  Answer getAnswerById(Long answerId) throws ResourceNotFoundException;
-
+  Optional<Answer> getAnswerById(Long answerId, Long questionId);
 }

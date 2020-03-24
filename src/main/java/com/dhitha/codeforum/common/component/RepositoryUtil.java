@@ -7,8 +7,8 @@ import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class RepositoryUtility {
-  private RepositoryUtility() {}
+public final class RepositoryUtil {
+  private RepositoryUtil() {}
 
   public static <T> String[] getNullPropertyNames(T object) {
     BeanWrapper wrapper = new BeanWrapperImpl(object);

@@ -2,6 +2,7 @@ package com.dhitha.codeforum.question.repository;
 
 import com.dhitha.codeforum.question.model.Question;
 import java.util.List;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 
 public interface QuestionRepository {
@@ -12,7 +13,7 @@ public interface QuestionRepository {
    * @param questionId question id
    * @return Question
    */
-  Question findById(Long questionId) throws IncorrectResultSizeDataAccessException;
+  Question findById(Long questionId) throws EmptyResultDataAccessException;
 
   /**
    * Find all questions
@@ -60,12 +61,12 @@ public interface QuestionRepository {
    * @param question question
    * @return Question
    */
-  Question update(Question question);
+  Question update(Question question) throws EmptyResultDataAccessException;
 
   /**
    * Delete the question
    *
    * @param questionId question id
    */
-  boolean delete(Long questionId);
+  boolean delete(Long questionId) throws EmptyResultDataAccessException;
 }

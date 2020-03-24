@@ -12,11 +12,45 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-@EnableWebSecurity
-public class SecurityConfig {
+@Configuration
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+  private static final String LOGIN_URL = "/login";
   @Autowired SecurityUserDetailService securityUserDetailService;
-
   @Autowired EncryptionUtil encryptionUtil;
+
+  @Override
+  public void configure(AuthenticationManagerBuilder auth) throws Exception {
+    auth.authenticationProvider(authProvider());
+  }
+
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.csrf().disable();
+    http.authorizeRequests().antMatchers(LOGIN_URL).permitAll();
+    http.authorizeRequests()
+        .antMatchers("/h2-console/**")
+        .permitAll()
+        .and()
+        .headers()
+        .frameOptions()
+        .disable();
+
+    http.authorizeRequests()
+        .anyRequest()
+        .authenticated()
+        .and()
+        .formLogin()
+        .loginPage(LOGIN_URL)
+        .loginProcessingUrl("/perform_login")
+        .defaultSuccessUrl("/home")
+        .failureUrl("/login?error=true")
+        .usernameParameter("username")
+        .passwordParameter("password")
+        .and()
+        .logout()
+        .logoutUrl("/logout")
+        .logoutSuccessUrl(LOGIN_URL);
+  }
 
   @Bean
   public PasswordEncoder passwordEncoder() {
@@ -47,45 +81,5 @@ public class SecurityConfig {
     authProvider.setUserDetailsService(securityUserDetailService);
     authProvider.setPasswordEncoder(passwordEncoder());
     return authProvider;
-  }
-  /** Manage security calls for front end */
-  @Configuration
-  public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
-    private static final String LOGIN_URL = "/login";
-
-    @Override
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-      auth.authenticationProvider(authProvider());
-    }
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-      http.csrf().disable();
-      http.authorizeRequests().antMatchers(LOGIN_URL).permitAll();
-      http.authorizeRequests()
-          .antMatchers("/h2-console/**")
-          .permitAll()
-          .and()
-          .headers()
-          .frameOptions()
-          .disable();
-
-      http.authorizeRequests()
-          .anyRequest()
-          .authenticated()
-          .and()
-          .formLogin()
-          .loginPage(LOGIN_URL)
-          .loginProcessingUrl("/perform_login")
-          .defaultSuccessUrl("/home")
-          .failureUrl("/login?error=true")
-          .usernameParameter("username")
-          .passwordParameter("password")
-          .and()
-          .logout()
-          .logoutUrl("/logout")
-          .logoutSuccessUrl(LOGIN_URL);
-    }
   }
 }

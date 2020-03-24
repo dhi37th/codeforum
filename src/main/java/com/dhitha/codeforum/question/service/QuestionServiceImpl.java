@@ -1,5 +1,8 @@
 package com.dhitha.codeforum.question.service;
 
+import com.dhitha.codeforum.answer.service.AnswerService;
+import com.dhitha.codeforum.comment.service.AnswerCommentService;
+import com.dhitha.codeforum.comment.service.QuestionCommentService;
 import com.dhitha.codeforum.common.component.SessionInfo;
 import com.dhitha.codeforum.question.model.Question;
 import com.dhitha.codeforum.question.repository.QuestionRepository;
@@ -17,6 +20,12 @@ public class QuestionServiceImpl implements QuestionService {
 
   @Autowired QuestionRepository questionRepository;
 
+  @Autowired AnswerService answerService;
+
+  @Autowired QuestionCommentService questionCommentService;
+
+  @Autowired AnswerCommentService answerCommentService;
+
   @Autowired SessionInfo sessionInfo;
 
   @Override
@@ -27,50 +36,79 @@ public class QuestionServiceImpl implements QuestionService {
   }
 
   @Override
-  public Question updateQuestion(Question question) {
-    return null;
+  public Optional<Question> updateQuestion(Question question) {
+    try {
+      question.setUpdatedBy(sessionInfo.getSessionUser().getId());
+      question.setUpdatedAt(LocalDateTime.now());
+      question = questionRepository.update(question);
+      return Optional.of(question);
+    } catch (IncorrectResultSizeDataAccessException e) {
+      log.error("Error in fetching question with id " + question.getId(), e);
+      return Optional.empty();
+    }
   }
 
   @Override
   public boolean deleteQuestion(Long questionId) {
-    //delete all question comments
-    //delete all answer comments
-    //delete all answers
+    // delete all question comments
+    questionCommentService.deleteAllComment(questionId);
+    log.info("question comment deleted");
+    // delete all answer comments
+    answerService
+        .getAllAnswersOfQuestion(questionId)
+        .ifPresent(
+            answers -> {
+              answers.forEach(
+                  answer ->
+                      answerCommentService.deleteAllComment(
+                          answer.getQuestionId(), answer.getId()));
+            });
+    log.info("answer comment deleted");
+    // delete all answers
+    answerService.deleteAllAnswer(questionId);
     return questionRepository.delete(questionId);
   }
 
   @Override
   public Optional<List<Question>> getAllCreatedBy(Long userId) {
     List<Question> questions = questionRepository.findAllCreatedBy(userId);
-    if(questions.isEmpty()) return Optional.empty();
+    if (questions.isEmpty()) return Optional.empty();
     return Optional.of(questions);
   }
 
   @Override
   public Optional<List<Question>> getAllQuestions() {
     List<Question> questions = questionRepository.findAll();
-    if(questions.isEmpty()) return Optional.empty();
+    if (questions.isEmpty()) return Optional.empty();
     return Optional.of(questions);
   }
 
   @Override
   public Optional<Question> getQuestionById(Long questionId) {
-    try{
-     Question question = questionRepository.findById(questionId);
-     return Optional.ofNullable(question);
-    }catch (IncorrectResultSizeDataAccessException e){
-      log.error("Error in fetching question with id "+questionId,e);
+    try {
+      Question question = questionRepository.findById(questionId);
+      log.info("getQuestionById question "+question);
+      return Optional.of(question);
+    } catch (IncorrectResultSizeDataAccessException e) {
+      log.error("Error in fetching question with id " + questionId, e);
       return Optional.empty();
     }
   }
 
   @Override
-  public List<Question> getAll(int limit, int offset) {
-    return questionRepository.findAll(limit, offset);
+  public Optional<List<Question>> getAllQuestions(int limit, int offset) {
+    if (limit == 0 && offset == 0) return getAllQuestions();
+    List<Question> questions = questionRepository.findAll(limit, offset);
+    if (questions.isEmpty()) return Optional.empty();
+    return Optional.of(questions);
   }
 
   @Override
-  public List<Question> getAllCreatedBy(int limit, int offset, Long userId) {
-    return questionRepository.findAllCreatedBy(limit, offset, userId);
+  public Optional<List<Question>> getAllCreatedBy(int limit, int offset, Long userId) {
+    if (limit == 0 && offset == 0) return getAllCreatedBy(userId);
+
+    List<Question> questions = questionRepository.findAllCreatedBy(limit, offset, userId);
+    if (questions.isEmpty()) return Optional.empty();
+    return Optional.of(questions);
   }
 }
