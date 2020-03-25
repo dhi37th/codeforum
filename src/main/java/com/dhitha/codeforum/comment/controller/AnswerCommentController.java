@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
-@RequestMapping("api/questions/{questionId}/answers/{answerId}/comments/")
+@RequestMapping("api/questions/{questionId}/answers/{answerId}/comments")
 public class AnswerCommentController {
   @Autowired AnswerCommentService answerCommentService;
 
-  @GetMapping(value = "{commentId}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(value = "/{commentId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Comment> getCommentByIdOfAnswer(
       @PathVariable("questionId") long questionId,
       @PathVariable("answerId") long answerId,
@@ -68,7 +68,7 @@ public class AnswerCommentController {
     return ResponseEntity.created(uri).body(comment);
   }
 
-  @DeleteMapping(value = "{commentId}")
+  @DeleteMapping(value = "/{commentId}")
   public ResponseEntity<Void> deleteAnswerComment(
       @PathVariable("questionId") long questionId,
       @PathVariable("answerId") Long answerId,
@@ -78,7 +78,7 @@ public class AnswerCommentController {
   }
 
   @PutMapping(
-      value = "{commentId}",
+      value = "/{commentId}",
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Comment> updateCommentForAnswer(

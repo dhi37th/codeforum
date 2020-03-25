@@ -1,6 +1,5 @@
 article{
   background: #f1f1f1;
-  padding: 2% 0 0;
 }
 
 body{
@@ -55,4 +54,24 @@ body{
 
 hr{
   border-top: 2px solid rgba(0,0,0,.1) !important;
+}
+
+.a-link{
+  text-decoration: none;
+}
+
+a.a-link:hover, a.a-link:active{
+  cursor: pointer !important;
+  text-decoration: underline !important;
+}
+
+.new-comment-textarea{
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+   box-sizing: border-box;
+}
+
+.new-comment-btn-div{
+  style="margin-left: -2em;"
 }

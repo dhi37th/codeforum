@@ -29,10 +29,10 @@ $.ajax({
   	});
 }
 
-function getCommentsForQuestion(question){
+function getCommentsForQuestion(questionId){
 $.ajax({
   		type: 'GET',
-  		url: 'api/questions/'+question.id+'/comments/',
+  		url: 'api/questions/'+questionId+'/comments',
   		dataType: 'json',
   		success: function(questionComments) {
   			createQuestionCommentBody(questionComments);
@@ -71,13 +71,13 @@ $.ajax({
   	});
 }
 
-function getCommentsForAnswer(question,answer){
+function getCommentsForAnswer(questionId,answerId){
 $.ajax({
   		type: 'GET',
-  		url: 'api/questions/'+question.id+'/answers/'+answer.id+'/comments/',
+  		url: 'api/questions/'+questionId+'/answers/'+answerId+'/comments',
   		dataType: 'json',
   		success: function(answerComments) {
-  			createAnswerCommentBody(answerComments,answer);
+  			createAnswerCommentBody(answerComments,answerId);
   		},
   		error : function(xhr, textStatus, errorThrown){
   			if(xhr.status == 404){
@@ -159,6 +159,20 @@ var questionBodyDiv=
 "    <div class='row'>"+
 "      <ul class='commentList w-100 mr-3' id='questionComments'>"+
 "      </ul>"+
+"      <ul class='commentList w-100 mr-3' id='addQuestionComment'>"+
+"        <li class='border-bottom w-100 lh-2 mb-2' id='newCommentLi' style='display:none;'>"+
+"          <div class='row'>"+
+"            <div class='col-12'>"+
+"             <form onsubmit='addNewQuestionComment("+question.id+", event)'>"+
+"              <textarea required class='new-comment-textarea' row='3'></textarea>"+
+"              <input class='btn btn-primary' style='line-height:15px;' type='submit' value='Add'>"+
+"              <a class='btn' onclick='$(newCommentLi).hide();'>Cancel</a>"+
+"             </form>"+
+"            </div>"+
+"          </div>"+
+"        </li>"+
+"        <li><a onclick='$(newCommentLi).show();' class='a-link text-muted'>add comment</a></li>"+
+"      </ul>"+
 "    </div>"+
 "  </div>"+
 "</div>"
@@ -167,13 +181,14 @@ $('#qD').append(questionBodyDiv);
 }
 
 function createQuestionCommentSkeleton(question){
-    getCommentsForQuestion(question);
+    getCommentsForQuestion(question.id);
 }
 
 function createQuestionCommentBody(commentList){
+  $('#questionComments').empty();
   commentList.forEach(comment=>{
     var commentBody =
-    "        <li class='border-bottom w-100 lh-2' data-comment='"+comment.id+"'>"+
+    "        <li class='border-bottom w-100 lh-2' data-question-comment='"+comment.id+"'>"+
     "          <div class='row'>"+
     "            <div class='col-1'>"+
     "              <button class='btn-comment' onclick='incrementComment()' title='Up Vote?'>"+
@@ -189,6 +204,34 @@ function createQuestionCommentBody(commentList){
     "        </li>";
     $('#questionComments').append(commentBody);
   });
+}
+
+function addNewQuestionComment(questionId,event){
+  event.preventDefault();
+  var id="#newCommentLi";
+  var text = $(id).find("textarea").val();
+  $.ajax({
+    		type: 'POST',
+    		url: 'api/questions/'+questionId+'/comments',
+    		contentType: "application/json",
+    		data: JSON.stringify({ text : text}),
+    		dataType: 'json',
+    		success: function(comment) {
+    		  $(id).find("textarea").val('');
+    		  $(id).hide();
+    			getCommentsForQuestion(questionId);
+    		},
+    		error : function(xhr, textStatus, errorThrown){
+    			if(xhr.status == 404){
+
+    			}else  if(xhr.status == 401 || xhr.status == 403){
+    				alert('Unauthorized to access resource');
+    			}else{
+    				alert('Error fetching questions');
+    			}
+    		},
+    		async: true
+    	});
 }
 
 function createAnswersSkeleton(question){
@@ -244,19 +287,34 @@ function createAnswerBody(question,answers){
        "    <div class='row'>"+
        "      <ul class='commentList w-100 mr-3' id='answerComments'>"+
        "      </ul>"+
+       "      <ul class='commentList w-100 mr-3'>"+
+       "        <li class='border-bottom w-100 lh-2 mb-2' id='aCom"+answer.id+"' style='display:none;'>"+
+       "          <div class='row'>"+
+       "            <div class='col-12'>"+
+       "             <form onsubmit='addNewAnswerComment("+answer.id+","+question.id+", event)'>"+
+       "              <textarea required class='new-comment-textarea' row='3'></textarea>"+
+       "              <input class='btn btn-primary' style='line-height:15px;' type='submit' value='Add'>"+
+       "              <a class='btn' onclick='$(aCom"+answer.id+").hide();'>Cancel</a>"+
+       "             </form>"+
+       "            </div>"+
+       "          </div>"+
+       "        </li>"+
+       "        <li><a onclick='$(aCom"+answer.id+").show();' class='a-link text-muted'>add comment</a></li>"+
+       "      </ul>"+
        "    </div>"+
        "  </div>"+
        "</div>"+
        "<hr>"
        $('#qD').append(answerDiv);
 
-       getCommentsForAnswer(question,answer);
+       getCommentsForAnswer(question.id,answer.id);
   });
 }
-function createAnswerCommentBody(comments,answer){
+function createAnswerCommentBody(comments,answerId){
+  $("div").find("[data-answer='"+answerId+"']").find("#answerComments").empty();
   comments.forEach(comment=>{
     var commentBody =
-    "        <li class='border-bottom w-100 lh-2' data-comment='"+comment.id+"'>"+
+    "        <li class='border-bottom w-100 lh-2' data-answer-comment='"+comment.id+"'>"+
     "          <div class='row '>"+
     "            <div class='col-1'>"+
     "              <button class='btn-comment' onclick='incrementComment()' title='Up Vote?'>"+
@@ -270,9 +328,37 @@ function createAnswerCommentBody(comments,answer){
     "            </div>"+
     "          </div>"+
     "        </li>";
-    $("div").find("[data-answer='"+answer.id+"']").find("#answerComments").append(commentBody);
+    $("div").find("[data-answer='"+answerId+"']").find("#answerComments").append(commentBody);
 
   });
+}
+
+function addNewAnswerComment(answerId,questionId,event){
+  var id = "#aCom"+answerId;
+  event.preventDefault();
+  var text = $(id).find("textarea").val();
+  $.ajax({
+      		type: 'POST',
+      		url: 'api/questions/'+questionId+'/answers/'+answerId+'/comments',
+      		contentType: "application/json",
+      		data: JSON.stringify({ text : text}),
+      		dataType: 'json',
+      		success: function(comment) {
+      		  $(id).find("textarea").val('');
+      		  $(id).hide();
+      			getCommentsForAnswer(questionId,answerId);
+      		},
+      		error : function(xhr, textStatus, errorThrown){
+      			if(xhr.status == 404){
+
+      			}else  if(xhr.status == 401 || xhr.status == 403){
+      				alert('Unauthorized to access resource');
+      			}else{
+      				alert('Error fetching questions');
+      			}
+      		},
+      		async: true
+      	});
 }
 
 
