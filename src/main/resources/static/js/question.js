@@ -50,13 +50,13 @@ $.ajax({
   	});
 }
 
-function getAnswersForQuestions(question){
+function getAnswersForQuestions(questionId){
 $.ajax({
   		type: 'GET',
-  		url: 'api/questions/'+question.id+'/answers',
+  		url: 'api/questions/'+questionId+'/answers',
   		dataType: 'json',
   		success: function(answers) {
-  			createAnswerBody(question,answers);
+  			createAnswerBody(questionId,answers);
   		},
   		error : function(xhr, textStatus, errorThrown){
   			if(xhr.status == 404){
@@ -146,7 +146,7 @@ var questionBodyDiv=
 "  </div>"+
 "  <div class='col-10'>"+
 "    <div class='row'>"+
-"      <p>"+question.text+"</p>"+
+"      <p class='font-xlarge'>"+question.text+"</p>"+
 "    </div>"+
 "    <div class='row mr-1 pb-2 border-bottom' id='questionTagRow'>"+
 "      <div class='col-8'>"+
@@ -191,13 +191,13 @@ function createQuestionCommentBody(commentList){
     "        <li class='border-bottom w-100 lh-2' data-question-comment='"+comment.id+"'>"+
     "          <div class='row'>"+
     "            <div class='col-1'>"+
-    "              <button class='btn-comment' onclick='incrementComment()' title='Up Vote?'>"+
+    "              <button onclick='incrementComment()' title='Up Vote?'>"+
     "                &#10003;"+
     "              </button>"+
-    "              <span>"+comment.upVote+"</span>"+
+    "              <span class='font-medium'>"+comment.upVote+"</span>"+
     "            </div>"+
     "            <div class='col-10'>"+
-    "              <span>"+comment.text+"</span>"+
+    "              <span class='font-large'>"+comment.text+"</span>"+
     "                <span class='font-weight-bold'>&nbsp-"+comment.createdBy+"</span><span class='text-muted'>&nbsp "+comment.createdAt+"</span>"+
     "            </div>"+
     "          </div>"+
@@ -235,14 +235,14 @@ function addNewQuestionComment(questionId,event){
 }
 
 function createAnswersSkeleton(question){
-  getAnswersForQuestions(question);
+  getAnswersForQuestions(question.id);
 }
 
-function createAnswerBody(question,answers){
+function createAnswerBody(questionId,answers){
   var answerHeader =
   "<div class='row'>"+
    "<div class='col-12'>"+
-    "<h5>"+answers.length+" Answers</h5>"+
+    "<h3>"+answers.length+" Answers</h3>"+
    "</div>"+
   "</div>"+
   "<hr>";
@@ -275,7 +275,7 @@ function createAnswerBody(question,answers){
        "  </div>"+
        "  <div class='col-10'>"+
        "    <div class='row'>"+
-       "      <p>"+answer.text+"</p>"+
+       "      <span class='font-xlarge'>"+answer.text+"</span>"+
        "    </div>"+
        "    <div class='row mr-1 pb-2 border-bottom'>"+
        "      <div class='col-8'>"+
@@ -291,7 +291,7 @@ function createAnswerBody(question,answers){
        "        <li class='border-bottom w-100 lh-2 mb-2' id='aCom"+answer.id+"' style='display:none;'>"+
        "          <div class='row'>"+
        "            <div class='col-12'>"+
-       "             <form onsubmit='addNewAnswerComment("+answer.id+","+question.id+", event)'>"+
+       "             <form onsubmit='addNewAnswerComment("+answer.id+","+questionId+", event)'>"+
        "              <textarea required class='new-comment-textarea' row='3'></textarea>"+
        "              <input class='btn btn-primary' style='line-height:15px;' type='submit' value='Add'>"+
        "              <a class='btn' onclick='$(aCom"+answer.id+").hide();'>Cancel</a>"+
@@ -306,9 +306,9 @@ function createAnswerBody(question,answers){
        "</div>"+
        "<hr>"
        $('#qD').append(answerDiv);
-
-       getCommentsForAnswer(question.id,answer.id);
+       getCommentsForAnswer(questionId,answer.id);
   });
+  createNewAnswerSkeleton(questionId);
 }
 function createAnswerCommentBody(comments,answerId){
   $("div").find("[data-answer='"+answerId+"']").find("#answerComments").empty();
@@ -317,13 +317,13 @@ function createAnswerCommentBody(comments,answerId){
     "        <li class='border-bottom w-100 lh-2' data-answer-comment='"+comment.id+"'>"+
     "          <div class='row '>"+
     "            <div class='col-1'>"+
-    "              <button class='btn-comment' onclick='incrementComment()' title='Up Vote?'>"+
+    "              <button onclick='incrementComment()' title='Up Vote?'>"+
     "                &#10003;"+
     "              </button>"+
-    "              <span>"+comment.upVote+"</span>"+
+    "              <span class='font-medium'>"+comment.upVote+"</span>"+
     "            </div>"+
     "            <div class='col-10'>"+
-    "              <span>"+comment.text+"</span><span"+
+    "              <span class='font-large'>"+comment.text+"</span><span"+
     "                class='font-weight-bold'>&nbsp-"+comment.createdBy+"</span><span class='text-muted'>&nbsp "+comment.createdAt+"</span>"+
     "            </div>"+
     "          </div>"+
@@ -361,13 +361,63 @@ function addNewAnswerComment(answerId,questionId,event){
       	});
 }
 
+function createNewAnswerSkeleton(questionId){
+  var body =
+      "<div class='row'>"+
+         "<div class='col-12'>"+
+          "<h3>Your Answer</h3>"+
+         "</div>"+
+        "</div>"+
+        "<hr>"+
+      "<div class='row'>"+
+        "<div class='col-12'>"+
+         "<textarea name='newAnswer' id='newAnswer'></textarea>"+
+         "<a id='submitAnswer' onclick='addNewAnswer("+questionId+")' class='btn btn-primary my-3 p-2'>Submit</a>"+
+        "</div>"+
+      "</div>";
+      $('#qD').append(body);
+
+      CKEDITOR.editorConfig = function (config) {
+            config.language = 'es';
+            config.uiColor = '#F7B42C';
+            config.height = 300;
+            config.toolbarCanCollapse = true;
+
+      };
+      CKEDITOR.replace('newAnswer');
+}
+
+function addNewAnswer(questionId){
+  var text = CKEDITOR.instances['newAnswer'].getData();
+   $.ajax({
+        		type: 'POST',
+        		url: 'api/questions/'+questionId+'/answers/',
+        		contentType: "application/json",
+        		data: JSON.stringify({ text : text}),
+        		dataType: 'json',
+        		success: function(comment) {
+        		  window.location.reload(true);
+        		},
+        		error : function(xhr, textStatus, errorThrown){
+        			if(xhr.status == 404){
+
+        			}else  if(xhr.status == 401 || xhr.status == 403){
+        				alert('Unauthorized to access resource');
+        			}else{
+        				alert('Error fetching questions');
+        			}
+        		},
+        		async: true
+        	});
+
+}
 
 function createQuestionTag(tag){
   var tagHtml = '';
   var chars = tag.split(',');
   chars.forEach(t => {
      if(t!=undefined || t!='null'){
-       tagHtml+="<a class='tag-item m-1 p-1 small'>"+t+"</a>"
+       tagHtml+="<a class='tag-item m-1 p-1'>"+t+"</a>"
      }
    });
   return tagHtml;

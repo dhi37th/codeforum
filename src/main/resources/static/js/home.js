@@ -24,18 +24,18 @@ function createAllQuestionDiv(question){
     "</div>"+
     "<div class='col-10'>"+
       "<div class='row'>"+
-        "<h4><a href='question?id="+question.id+"'>"+question.heading+"</a></h4>"+
+        "<h4><a href='question?id="+question.id+"'><span class='font-xxlarger'>"+question.heading+"</span></a></h4>"+
       "</div>"+
       "<div class='row'>"+
-        "<p class='text-truncate mr-5'>"+question.text+"</p>"+
+        "<p class='text-truncate mr-5 font-xlarge'>"+question.text+"</p>"+
       "</div>"+
       "<div class='row'>"+
         "<div class='col-8 ml-n1_2'>"+
           ""+createAllQuestionTag(question.tag)+""+
         "</div>"+
         "<div class='col-4'>"+
-          "<p class='mb-1 small'>asked "+question.createdAt+"</p>"+
-          "<p class='mb-1'>User</p>"+
+          "<p class='mb-1 text-muted'>asked "+question.createdAt+"</p>"+
+          "<p class='mb-1 font-large'>User</p>"+
         "</div>"+
       "</div>"+
     "</div>"+

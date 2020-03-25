@@ -35,11 +35,6 @@ body{
   font-size:.8em;
 }
 
-.btn-comment{
-  padding:0;
-  line-height:1;
-}
-
 .mr-n5{
   margin-right: -5em !important;
 }
@@ -74,4 +69,24 @@ a.a-link:hover, a.a-link:active{
 
 .new-comment-btn-div{
   style="margin-left: -2em;"
+}
+
+.font-xxlarge{
+  font-size: xx-large;
+}
+
+.font-xlarge{
+  font-size: x-large;
+}
+
+.font-larger{
+  font-size: larger;
+}
+
+.font-large{
+  font-size: large;
+}
+
+.font-medium{
+  font-size: 15px;
 }
