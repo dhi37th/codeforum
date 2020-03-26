@@ -27,7 +27,7 @@ function createAllQuestionDiv(question){
         "<h4><a href='question?id="+question.id+"'><span class='font-xxlarger'>"+question.heading+"</span></a></h4>"+
       "</div>"+
       "<div class='row'>"+
-        "<p class='text-truncate mr-5 font-xlarge'>"+question.text+"</p>"+
+        "<span class='text-truncate mr-5 font-xlarge'>"+question.text+"</span>"+
       "</div>"+
       "<div class='row'>"+
         "<div class='col-8 ml-n1_2'>"+

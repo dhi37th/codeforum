@@ -1,12 +1,15 @@
 $(function(){
 createHeader();
+createAskModal();
 $('#sidebarToggle').click(function(e){
   e.preventDefault();
+  //TODO: impmenet toggle for sidebar
   console.log('sidebar clicked');
 });
 
 $('#searchButtonToggle').click(function(e){
   e.preventDefault();
+  //TODO: implement search feature
   console.log('search clicked');
 });
 
@@ -71,18 +74,104 @@ var sideNav =
 "<nav class='navbar navbar-expand-lg sticky-top side-sticky'>"+
   "<div class='collapse navbar-collapse'>"+
     "<ul class='nav nav-pills flex-md-row' id='leftNav'>"+
-      "<li class='nav-item mb-3'>"+
-        "<a class='nav-link active' style='cursor:pointer;' id='myQuestionNav'>My Questions</a>"+
-      "</li>"+
       "<li class='nav-item mb-3 border-bottom border-dark'>"+
-        "<a class='nav-link' style='cursor:pointer;' id='allQuestionNav'>All Questions</a>"+
+        "<a class='nav-link active' style='cursor:pointer;' id='allQuestionNav'>All Questions</a>"+
+      "</li>"+
+      "<li class='nav-item mb-3'>"+
+        "<a class='nav-link' style='cursor:pointer;' id='myQuestionNav'>My Questions</a>"+
       "</li>"+
       "<li class='nav-item mb-3 mt-5'>"+
-        "<a class='nav-link bg-success askQuestion' style='cursor:pointer;' id='askQuestionNav'>Ask Question</a>"+
+        "<a class='nav-link bg-success askQuestion' onclick='askQuestion();' style='cursor:pointer;' id='askQuestionNav'>Ask Question</a>"+
       "</li>"+
     "</ul>"+
   "</div>"+
 "</nav>"+
 "</div>";
 $('.mainRow').prepend(sideNav);
+}
+
+function createAskModal(){
+  var modal =
+  "<div class='modal fade' id='askModal' tabindex='-1' role='dialog'>"+
+    "<div class='modal-dialog modal-lg' role='document'>"+
+      "<div class='modal-content'>"+
+        "<div class='modal-body'>"+
+          "<div class='row'>"+
+             "<div class='col-12'>"+
+              "<p style='color:green; display:none;' id='feedback'></p>"+
+              "<div class='form-group'>"+
+                "<label for='q-heading' class='control-label'>Heading:</label>"+
+                "<input type='text' class='form-control' id='q-heading'	value=''>"+
+              "</div>"+
+              "<div class='form-group'>"+
+                "<label for='q-text' class='control-label'>Text:</label>"+
+                "<textarea  name='q-text' id='q-text'></textarea>"+
+              "</div>"+
+              "<div class='form-group'>"+
+                "<label for='q-tag' class='control-label'>Tag:<small>(Enter comma seperated values)</small></label>"+
+                "<input type='text' class='form-control' id='q-tag'>"+
+              "</div>"+
+              "</div>"+
+          "</div>"+
+        "</div>"+
+        "<div class='modal-footer'>"+
+          "<a class='btn btn-primary' id='askSubmit'>Submit</a>"+
+          "<button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>"+
+        "</div>"+
+      "</div>"+
+    "</div>"+
+  "</div>";
+
+  $('body').append(modal);
+
+  CKEDITOR.editorConfig = function (config) {
+              config.language = 'es';
+              config.uiColor = '#F7B42C';
+              config.height = 300;
+              config.toolbarCanCollapse = true;
+
+        };
+  CKEDITOR.replace('q-text');
+
+  $('#askSubmit').click(function(e){
+    e.preventDefault();
+    var heading = $('#q-heading').val();
+    var tag = $('#q-tag').val();
+    var text = CKEDITOR.instances['q-text'].getData();
+
+    $.ajax({
+        		type: 'POST',
+        		url: 'api/questions',
+        		contentType: "application/json",
+        		data: JSON.stringify({ heading : heading, text : text, tag : tag}),
+        		dataType: 'json',
+        		success: function(question) {
+        		  $('#feedback').text('Question created successfully');
+              $('#feedback').show();
+        		},
+        		error : function(xhr, textStatus, errorThrown){
+        			if(xhr.status == 404){
+
+        			}else  if(xhr.status == 401 || xhr.status == 403){
+        				alert('Unauthorized to access resource');
+        			}else{
+        				alert('Error fetching questions');
+        			}
+        		},
+        		async: true
+     });
+  });
+}
+
+function askQuestion(){
+  	var mod = $('#askModal');
+  	mod.modal('show');
+
+  	mod.on('hidden.bs.modal', function () {
+  	  CKEDITOR.instances['q-text'].setData('');
+  		mod.find('#q-heading').val('');
+  		mod.find('#q-text').val('');
+  		mod.find('#q-tag').val('');
+  		mod.find('#feedback').hide();
+  	});
 }
